@@ -1,4 +1,4 @@
-package easypath;
+package frc.robot.easypath;
 
 import java.util.function.Supplier;
 import javafx.geometry.Point2D;
