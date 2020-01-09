@@ -1,6 +1,6 @@
 package frc.robot.autotasks;
 
-import easypath.FollowPath;
+import frc.robot.easypath.FollowPath;
 
 public class EasyPathTask implements TaskInterface {
 
