@@ -23,9 +23,7 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain{
 
     @Override
     public void setLeftRightDriveSpeed(double left, double right) {
-        
         tankDrive(left, right);
-    
     }
 
     @Override
@@ -43,6 +41,32 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain{
     @Override
     public void resetEncodersAndGyro() {
         // TODO Auto-generated method stub
+    }
+
+    public void setArcadeDriveSpeed(double speed, double turn) {
+		arcadeDrive(speed, turn, true);
+    }
+    
+	public void setBrake(){
 
     }
+
+ 
+	public void setCoast() {
+
+    }
+
+ 
+	public double getLeftEncoderDistance() {
+        return 0;
+    }
+
+
+    public double getRightEncoderDistance() {
+        return 0;
+	}
+
+
+	public void calibrateGyro() {
+	}
 }
