@@ -4,7 +4,7 @@ import frc.robot.ShootingMechanism;
 
 public class ShootingMechanismTask implements TaskInterface {
 
-	private ShootingMechanismTask mechanism;
+	private ShootingMechanism mechanism;
 	private Runnable modeMethod;
 	private boolean isFinished;
 	private int numTicks;
@@ -24,15 +24,7 @@ public class ShootingMechanismTask implements TaskInterface {
 	}
 
 	@Override
-	public void execute() {
-		if (numTicks < duration) {
-			modeMethod.run();
-			mechanism.periodic();
-		} else {
-			end();
-		}
-		numTicks++;
-	}
+	public void execute() {}
 
 	@Override
 	public boolean isFinished() {
@@ -40,9 +32,6 @@ public class ShootingMechanismTask implements TaskInterface {
 	}
 
 	@Override
-	public void end() {
-		mechanism.idle();
-		mechanism.periodic();
-		isFinished = true;
-	}
+	public void end() {}
+	
 }
