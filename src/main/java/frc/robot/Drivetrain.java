@@ -15,12 +15,12 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain{
     private static Drivetrain instance;
     static final int DISTANCE_PER_PULSE = 1;
     private static ADIS16470_IMU IMU = new ADIS16470_IMU();
+
     private Drivetrain(){
         super(leftGroup, rightGroup);
         leftEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
         rightEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
         resetEncodersAndGyro();
-
     }
     
     public static Drivetrain getInstance(){
@@ -37,7 +37,6 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain{
 
     @Override
     public double getInchesTraveled() {
-
         return ((getLeftEncoderDistance() + getRightEncoderDistance()) / 2);
     }
 
@@ -53,14 +52,10 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain{
        IMU.reset();
     }
 
-	public void setBrake(){
-
-    }
+	public void setBrake(){}
 
  
-	public void setCoast() {
-
-    }
+	public void setCoast() {}
 
  
 	public double getLeftEncoderDistance() {
@@ -76,4 +71,5 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain{
 	public void calibrateGyro() {
         IMU.calibrate();
     }
+
 }
