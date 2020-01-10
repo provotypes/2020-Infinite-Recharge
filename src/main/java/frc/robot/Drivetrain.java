@@ -1,17 +1,26 @@
 package frc.robot;
 
+import com.analog.adis16470.frc.ADIS16470_IMU;
+
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.easypath.EasyPathDrivetrain;
 
 public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain{
-    
+    private static Encoder leftEncoder;
+    private static Encoder rightEncoder;
     private static SpeedControllerGroup leftGroup;
     private static SpeedControllerGroup rightGroup;
     private static Drivetrain instance;
-
+    static final int DISTANCE_PER_PULSE = 1;
+    private static ADIS16470_IMU IMU = new ADIS16470_IMU();
     private Drivetrain(){
         super(leftGroup, rightGroup);
+        leftEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
+        rightEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
+        resetEncodersAndGyro();
+
     }
     
     public static Drivetrain getInstance(){
@@ -28,25 +37,22 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain{
 
     @Override
     public double getInchesTraveled() {
-        // TODO Auto-generated method stub
-        return 0;
+
+        return ((getLeftEncoderDistance() + getRightEncoderDistance()) / 2);
     }
 
     @Override
     public double getCurrentAngle() {
-        // TODO Auto-generated method stub
-        return 0;
+        return IMU.getAngle();
     }
 
     @Override
     public void resetEncodersAndGyro() {
-        // TODO Auto-generated method stub
+       leftEncoder.reset();
+       rightEncoder.reset();
+       IMU.reset();
     }
 
-    public void setArcadeDriveSpeed(double speed, double turn) {
-		arcadeDrive(speed, turn, true);
-    }
-    
 	public void setBrake(){
 
     }
@@ -58,15 +64,16 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain{
 
  
 	public double getLeftEncoderDistance() {
-        return 0;
+        return leftEncoder.getDistance();
     }
 
 
     public double getRightEncoderDistance() {
-        return 0;
+        return rightEncoder.getDistance();
 	}
 
 
 	public void calibrateGyro() {
-	}
+        IMU.calibrate();
+    }
 }
