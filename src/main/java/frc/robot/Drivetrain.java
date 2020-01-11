@@ -13,18 +13,18 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain{
     private static SpeedControllerGroup leftGroup;
     private static SpeedControllerGroup rightGroup;
     private static Drivetrain instance;
-    static final int DISTANCE_PER_PULSE = 1;
+    private static final int DISTANCE_PER_PULSE = 1;
     private static ADIS16470_IMU IMU = new ADIS16470_IMU();
-
-    private Drivetrain(){
+    
+    private Drivetrain() {
         super(leftGroup, rightGroup);
         leftEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
         rightEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
         resetEncodersAndGyro();
     }
     
-    public static Drivetrain getInstance(){
-        if(instance == null){
+    public static Drivetrain getInstance() {
+        if(instance == null) {
             instance = new Drivetrain();
         }
         return instance;
@@ -52,7 +52,7 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain{
        IMU.reset();
     }
 
-	public void setBrake(){}
+	public void setBrake() {}
 
  
 	public void setCoast() {}
@@ -72,4 +72,11 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain{
         IMU.calibrate();
     }
 
+    public void safeArcade() {
+
+    }
+
+    public static void update() {
+        
+    }
 }
