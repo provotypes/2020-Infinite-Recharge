@@ -4,12 +4,12 @@ public class ClimbingMechanism {
 
 private static ClimbingMechanism instance;
 
-private ClimbingMechanism(){
+private ClimbingMechanism() {
 
 }
 
-public static ClimbingMechanism getInstance(){
-    if(instance == null){
+public static ClimbingMechanism getInstance() {
+    if(instance == null) {
         instance = new ClimbingMechanism();
     }
     return instance;
