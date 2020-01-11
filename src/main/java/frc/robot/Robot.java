@@ -16,7 +16,7 @@ public class Robot extends TimedRobot {
   private IntakeMechanism intake = IntakeMechanism.getInstance();
   private AutoChooser autoChooser = new AutoChooser(new AutoFactory());
   private TaskInterface autoRoutine;
-  
+  private boolean isTaskRunning = false;
   @Override
   public void robotInit() {
  
@@ -36,7 +36,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
    // autoRoutine = autoChooser.getAutoChooser;
-   
+      autoRoutine.start();
    
   }
 
