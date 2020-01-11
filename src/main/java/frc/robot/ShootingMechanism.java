@@ -4,10 +4,10 @@ public class ShootingMechanism {
     
 private static ShootingMechanism instance;
 
-private ShootingMechanism(){}
+private ShootingMechanism() {}
 
-public static ShootingMechanism getInstance(){
-    if(instance == null){
+public static ShootingMechanism getInstance() {
+    if(instance == null) {
         instance = new ShootingMechanism();
     }
     return instance;
