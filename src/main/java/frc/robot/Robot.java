@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autotasks.AutoChooser;
@@ -17,20 +18,19 @@ public class Robot extends TimedRobot {
   private AutoChooser autoChooser = new AutoChooser(new AutoFactory());
   private TaskInterface autoRoutine;
   private boolean isTaskRunning = false;
+
+  private static ColorSensor colorSensor = ColorSensor.getInstance();
+  
   @Override
   public void robotInit() {
- 
+    colorSensor.matchColors();
   }
 
   
-  @Override
-  public void robotPeriodic() {
-    // SmartDashboard.putNumber("Red", detectedColor.red);
-    // SmartDashboard.putNumber("Green", detectedColor.green);
-    // SmartDashboard.putNumber("Blue", detectedColor.blue);
-    // SmartDashboard.putNumber("Confidence", match.confidence);
-    // SmartDashboard.putString("Detected Color", colorString);
-  }
+	@Override
+	public void robotPeriodic() {
+		colorSensor.update();
+	}
 
   
   @Override
@@ -40,26 +40,14 @@ public class Robot extends TimedRobot {
    
   }
 
-  /**
-   * This function is called periodically during autonomous.
-   */
-  @Override
-  public void autonomousPeriodic() {
-   
-    }
-  
+	@Override
+	public void autonomousPeriodic() {}
 
-  /**
-   * This function is called periodically during operator control.
-   */
-  @Override
-  public void teleopPeriodic() {
-  }
+	@Override
+	public void teleopPeriodic() {}
 
-  /**
-   * This function is called periodically during test mode.
-   */
-  @Override
-  public void testPeriodic() {
-  }
+	@Override
+	public void testPeriodic() {}
+
+
 }

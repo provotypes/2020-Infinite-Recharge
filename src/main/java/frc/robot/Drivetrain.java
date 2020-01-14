@@ -1,6 +1,6 @@
 package frc.robot;
 
-import com.analog.adis16470.frc.ADIS16470_IMU;
+// import com.analog.adis16470.frc.ADIS16470_IMU;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -13,18 +13,18 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain{
     private static SpeedControllerGroup leftGroup;
     private static SpeedControllerGroup rightGroup;
     private static Drivetrain instance;
-    static final int DISTANCE_PER_PULSE = 1;
-    private static ADIS16470_IMU IMU = new ADIS16470_IMU();
-    private Drivetrain(){
+    private static final int DISTANCE_PER_PULSE = 1;
+    // private static ADIS16470_IMU IMU = new ADIS16470_IMU();
+    
+    private Drivetrain() {
         super(leftGroup, rightGroup);
         leftEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
         rightEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
         resetEncodersAndGyro();
-
     }
     
-    public static Drivetrain getInstance(){
-        if(instance == null){
+    public static Drivetrain getInstance() {
+        if(instance == null) {
             instance = new Drivetrain();
         }
         return instance;
@@ -37,30 +37,26 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain{
 
     @Override
     public double getInchesTraveled() {
-
         return ((getLeftEncoderDistance() + getRightEncoderDistance()) / 2);
     }
 
     @Override
     public double getCurrentAngle() {
-        return IMU.getAngle();
+        // return IMU.getAngle();
+        return 0;
     }
 
     @Override
     public void resetEncodersAndGyro() {
        leftEncoder.reset();
        rightEncoder.reset();
-       IMU.reset();
+    //    IMU.reset();
     }
 
-	public void setBrake(){
-
-    }
+	public void setBrake() {}
 
  
-	public void setCoast() {
-
-    }
+	public void setCoast() {}
 
  
 	public double getLeftEncoderDistance() {
@@ -74,6 +70,14 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain{
 
 
 	public void calibrateGyro() {
-        IMU.calibrate();
+        // IMU.calibrate();
+    }
+
+    public void safeArcade() {
+
+    }
+
+    public static void update() {
+        
     }
 }

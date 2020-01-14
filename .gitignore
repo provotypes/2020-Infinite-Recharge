@@ -49,6 +49,7 @@
 
 # Package Files #
 *.jar
+!javafx.graphics.jar
 *.war
 *.nar
 *.ear
