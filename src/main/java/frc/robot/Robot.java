@@ -37,11 +37,21 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
    // autoRoutine = autoChooser.getAutoChooser;
       autoRoutine.start();
-   
+      isTaskRunning = true;
   }
 
 	@Override
-	public void autonomousPeriodic() {}
+	public void autonomousPeriodic() {
+    if (isTaskRunning) {
+        if (!autoRoutine.isFinished()) {
+            autoRoutine.execute();
+        }
+        else {
+            autoRoutine.end();
+            isTaskRunning = false;
+          }
+     }
+  }
 
 	@Override
 	public void teleopPeriodic() {}
@@ -51,3 +61,4 @@ public class Robot extends TimedRobot {
 
 
 }
+ 
