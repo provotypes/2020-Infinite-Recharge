@@ -4,14 +4,10 @@ import java.util.ArrayList;
 
 public class AutoChooser {
 
-	private static AutoFactory autoFactory;
-	public void setAutoFactory(AutoFactory factory1) {
-		autoFactory = factory1;
-	}
-	public AutoRoutine getChosenAuto() {
+	public static AutoRoutine getChosenAuto() {
 		String autoSelected = AutoSetup.getAutoChooser().getSelected();
 		System.out.println("Auto selected" + autoSelected);
-		AutoRoutine chosenRoutine = new AutoRoutine(autoFactory.emptyList());
+		AutoRoutine chosenRoutine = new AutoRoutine(AutoFactory.emptyList());
 		return chosenRoutine;
 	}
 
