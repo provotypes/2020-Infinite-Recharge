@@ -22,8 +22,9 @@ public class ColorSensor {
       
     private ColorSensor() {}
 
-    // private static Color[] kColors = new Color[] {kBlueTarget, kGreenTarget, kRedTarget, kYellowTarget};
-     
+    private Color[] kColors = new Color[] {kGreenTarget, kBlueTarget, kYellowTarget, kRedTarget};
+
+
 	public void matchColors() {
       m_colorMatcher.addColorMatch(kBlueTarget);
       m_colorMatcher.addColorMatch(kGreenTarget);
@@ -38,19 +39,19 @@ public class ColorSensor {
         return instance;
     }
 
-    public  void update() {
+    public  void ourColor() {
         String colorString;
         Color detectedColor = m_colorSensor.getColor();     
         ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
 
-        if (match.color == kBlueTarget) {
-            colorString = "Blue";
-          } else if (match.color == kRedTarget) {
-            colorString = "Red";
-          } else if (match.color == kGreenTarget) {
+        if (match.color == kColors[0]) {
             colorString = "Green";
-          } else if (match.color == kYellowTarget) {
+          } else if (match.color == kColors[1]) {
+            colorString = "Blue";
+          } else if (match.color == kColors[2]) {
             colorString = "Yellow";
+          } else if (match.color == kColors[3]) {
+            colorString = "Red";
           } else {
             colorString = "Unknown";
           }
@@ -61,4 +62,13 @@ public class ColorSensor {
           SmartDashboard.putNumber("Confidence", match.confidence);
           SmartDashboard.putString("Detected Color", colorString);
     }
+
+    public void actualColor(){
+      
+    }
+
+
+
+
+
   }

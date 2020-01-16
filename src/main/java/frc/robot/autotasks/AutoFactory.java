@@ -1,4 +1,5 @@
 package frc.robot.autotasks;
 
-public class AutoFactory {
+public class AutoFactory{
+
 }
