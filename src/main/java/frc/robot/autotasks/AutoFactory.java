@@ -1,5 +1,15 @@
 package frc.robot.autotasks;
 
-public class AutoFactory{
+import java.util.ArrayList;
+import java.util.List;
+
+public class AutoFactory {
+
+    public static List<TaskInterface> emptyList() {
+        return new ArrayList<TaskInterface>();
+
+    }
+
+
 
 }
