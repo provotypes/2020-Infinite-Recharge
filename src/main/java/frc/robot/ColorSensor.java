@@ -63,7 +63,7 @@ public class ColorSensor {
           SmartDashboard.putString("Detected Color", colorString);
     }
 
-    public void actualColor(){
+    public void actualColor() {
       
     }
 

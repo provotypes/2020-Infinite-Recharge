@@ -1,26 +1,44 @@
 package frc.robot;
 
 import com.analog.adis16470.frc.ADIS16470_IMU;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANEncoder;
 
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.easypath.EasyPathDrivetrain;
 
-public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain{
-    private static Encoder leftEncoder;
-    private static Encoder rightEncoder;
-    private static SpeedControllerGroup leftGroup;
-    private static SpeedControllerGroup rightGroup;
+public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain {
+    public static final double DISTANCE_PER_ROTATION = 1.0d/8.45d * 6.0d * Math.PI; // inches //Find Specific 2020 # later
+
+    private static CANEncoder frontLeftEncoder;
+    private static CANEncoder rearLeftEncoder;
+    private static CANEncoder frontRightEncoder;
+    private static CANEncoder rearRightEncoder;
+
+    private static CANSparkMax frontLeft = new CANSparkMax(1, CANSparkMax.MotorType.kBrushless);
+    private static CANSparkMax rearLeft = new CANSparkMax(2, CANSparkMax.MotorType.kBrushless);
+	private	static CANSparkMax frontRight = new CANSparkMax(3, CANSparkMax.MotorType.kBrushless);
+	private	static CANSparkMax rearRight = new CANSparkMax(4, CANSparkMax.MotorType.kBrushless);
+     
+    private static SpeedControllerGroup leftGroup = new SpeedControllerGroup(frontLeft, rearLeft);
+    private static SpeedControllerGroup rightGroup = new SpeedControllerGroup(frontRight, rearRight);
+
     private static Drivetrain instance;
-    private static int DISTANCE_PER_PULSE = 1;
     private static ADIS16470_IMU IMU = new ADIS16470_IMU();
-    private static double kP; //figure out later
-    
+    private static double kP; // figure out later
+
     private Drivetrain() {
         super(leftGroup, rightGroup);
-        leftEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
-        rightEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
+        frontLeftEncoder = frontLeft.getEncoder();
+        frontLeftEncoder = rearLeft.getEncoder();
+        frontLeftEncoder = frontRight.getEncoder();
+        frontLeftEncoder = rearRight.getEncoder();
+
+        frontLeftEncoder.setPositionConversionFactor(DISTANCE_PER_ROTATION);
+        rearLeftEncoder.setPositionConversionFactor(DISTANCE_PER_ROTATION);
+        frontRightEncoder.setPositionConversionFactor(DISTANCE_PER_ROTATION);
+        rearRightEncoder.setPositionConversionFactor(DISTANCE_PER_ROTATION);
         resetEncodersAndGyro();
     }
     
@@ -48,8 +66,10 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain{
 
     @Override
     public void resetEncodersAndGyro() {
-        leftEncoder.reset();
-        rightEncoder.reset();
+        frontLeftEncoder.setPosition(0.0d);
+		rearLeftEncoder.setPosition(0.0d);
+		frontRightEncoder.setPosition(0.0d);
+		rearRightEncoder.setPosition(0.0d);
         IMU.reset();
     }
 
@@ -61,15 +81,13 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain{
 	public void setCoast() {}
 
  
-	public double getLeftEncoderDistance() {
-        return leftEncoder.getDistance();
-    }
-
-
-    public double getRightEncoderDistance() {
-        return rightEncoder.getDistance();
+    public double getLeftEncoderDistance() {
+		return (((frontLeftEncoder.getPosition() + rearLeftEncoder.getPosition()) / 2.0d));
 	}
 
+	public double getRightEncoderDistance() {
+		return (((frontRightEncoder.getPosition() + rearRightEncoder.getPosition()) / 2.0d));
+	}
 
 	public void calibrateGyro() {
         IMU.calibrate();
