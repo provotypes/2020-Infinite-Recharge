@@ -1,7 +1,7 @@
 package frc.robot;
 
 import com.analog.adis16470.frc.ADIS16470_IMU;
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.*;
 import com.revrobotics.CANEncoder;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -16,10 +16,10 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
     private static CANEncoder frontRightEncoder;
     private static CANEncoder rearRightEncoder;
 
-    private static CANSparkMax frontLeft = new CANSparkMax(1, CANSparkMax.MotorType.kBrushless);
-    private static CANSparkMax rearLeft = new CANSparkMax(2, CANSparkMax.MotorType.kBrushless);
-	private	static CANSparkMax frontRight = new CANSparkMax(3, CANSparkMax.MotorType.kBrushless);
-	private	static CANSparkMax rearRight = new CANSparkMax(4, CANSparkMax.MotorType.kBrushless);
+    private static CANSparkMax frontLeft = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static CANSparkMax rearLeft = new CANSparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
+	private	static CANSparkMax frontRight = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
+	private	static CANSparkMax rearRight = new CANSparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
      
     private static SpeedControllerGroup leftGroup = new SpeedControllerGroup(frontLeft, rearLeft);
     private static SpeedControllerGroup rightGroup = new SpeedControllerGroup(frontRight, rearRight);
