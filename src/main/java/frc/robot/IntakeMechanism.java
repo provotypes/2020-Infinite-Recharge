@@ -31,7 +31,7 @@ public class IntakeMechanism {
         off;
     }
 
-intakeMechanismModes state = intakeMechanismModes.off;
+    intakeMechanismModes state = intakeMechanismModes.off;
 
 	public void update() {
 		
@@ -60,7 +60,7 @@ intakeMechanismModes state = intakeMechanismModes.off;
                 break;
             case indexer:
                 innerIntakeWheelsOFF();
-                outerIntakeWheelsOFF();
+                outerIntakeWheelsReverse();
                 indexerON();
                 break;
             case reverse:
