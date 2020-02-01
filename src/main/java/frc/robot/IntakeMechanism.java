@@ -1,5 +1,8 @@
 package frc.robot;
 
+import java.util.Map;
+import static java.util.Map.entry;
+
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
@@ -22,108 +25,117 @@ public class IntakeMechanism {
     
     //It will probably make no sense to have only one of the
     // intakes on as the ball would not make it through to the indexer.
-    enum intakeMechanismModes {
+    enum IntakeMechanismModes {
         outerIntakeOn,
         bothIntakesOn,
         indexerAndIntakes,
         indexer,
         reverse,
-        off;
+        off
     }
 
-    intakeMechanismModes state = intakeMechanismModes.off;
+    private IntakeMechanismModes intakeMechanismModes = IntakeMechanismModes.off;
 
-	public void update() {
-		
-		switch (state) {
-        
-            case off:
-                outerIntakeWheelsOFF();
-                innerIntakeWheelsOFF();
-                indexerOFF();
-			    break;
-            case outerIntakeOn:
-                outerIntakeWheelsON();
-                innerIntakeWheelsOFF();
-             // indexerON();
-                break;
-            case bothIntakesOn:
-                outerIntakeWheelsON();
-                innerIntakeWheelsON();
-             // indexerOFF(); if indexer is on then it 
-             // would be the same as the following state
-                break;
-            case indexerAndIntakes:
-                outerIntakeWheelsON();
-                innerIntakeWheelsON();
-                indexerON();
-                break;
-            case indexer:
-                innerIntakeWheelsOFF();
-                outerIntakeWheelsReverse();
-                indexerON();
-                break;
-            case reverse:
-                innerIntakeWheelsReverse();
-                outerIntakeWheelsReverse();
-             // indexerOFF();
-                break;
-        }
+    public void update() {
+	    final Map<IntakeMechanismModes, Runnable> intakeModes = Map.ofEntries(
+			entry(IntakeMechanismModes.off, this::executeOff),
+			entry(IntakeMechanismModes.outerIntakeOn, this::executeOuterIntakeOn),
+			entry(IntakeMechanismModes.bothIntakesOn, this::executeBothIntakesOn),
+			entry(IntakeMechanismModes.indexerAndIntakes, this::executeIndexerAndIntakes),
+			entry(IntakeMechanismModes.indexer, this::executeIndexer),
+			entry(IntakeMechanismModes.reverse, this::executeReverse)
+	    );
+    }
+    public void off() {
+        this.intakeMechanismModes = IntakeMechanismModes.off;
     }
 
-    public void off(){
-        state = intakeMechanismModes.off;
+    public void outerIntakeOn() {
+        this.intakeMechanismModes = IntakeMechanismModes.outerIntakeOn;
     }
 
-    public void outerIntakeOn(){
-        state = intakeMechanismModes.outerIntakeOn;
+    public void bothIntakesOn() {
+        this.intakeMechanismModes = IntakeMechanismModes.bothIntakesOn;
+    }    
+
+    public void indexerAndIntakes() {
+        this.intakeMechanismModes = IntakeMechanismModes.indexerAndIntakes;
     }
 
-    public void bothIntakesOn(){
-        state = intakeMechanismModes.bothIntakesOn;
+    public void indexer() {
+        this.intakeMechanismModes = IntakeMechanismModes.indexer;
     }
 
-    public void indexerAndIntakes(){
-        state = intakeMechanismModes.indexerAndIntakes;
+    public void reverse() {
+        this.intakeMechanismModes = IntakeMechanismModes.reverse;
     }
 
-    public void indexer(){
-        state = intakeMechanismModes.indexer;
+    public void executeOff() {
+        outerIntakeWheelsOFF();
+        innerIntakeWheelsOFF();
+        indexerOFF();
     }
 
-    public void reverse(){
-        state = intakeMechanismModes.reverse;
+    public void executeOuterIntakeOn() {
+        outerIntakeWheelsON();
+        innerIntakeWheelsOFF();
+     // indexerON();
     }
 
-    public void outerIntakeWheelsON(){
-
+    public void executeBothIntakesOn() {
+        outerIntakeWheelsON();
+        innerIntakeWheelsON();
+        // indexerOFF(); if indexer is on then it 
+        // would be the same as the following state  
     }
 
-    public void outerIntakeWheelsOFF(){
-
+    public void executeIndexerAndIntakes() {
+        outerIntakeWheelsON();
+        innerIntakeWheelsON();
+        indexerON();
     }
 
-    public void innerIntakeWheelsON(){
-
+    public void executeIndexer() {
+        innerIntakeWheelsOFF();
+        outerIntakeWheelsReverse();
+        indexerON();
     }
 
-    public void innerIntakeWheelsOFF(){
+    public void executeReverse() {
+        innerIntakeWheelsReverse();
+        outerIntakeWheelsReverse();
+     // indexerOFF();
+    }
+
+    public void outerIntakeWheelsON() {
 
     }
 
-    public void indexerON(){
+    public void outerIntakeWheelsOFF() {
+
+    }
+
+    public void innerIntakeWheelsON() {
+
+    }
+
+    public void innerIntakeWheelsOFF() {
+
+    }
+
+    public void indexerON() {
         //indexer.set(ControlMode., INDEXER_PERCENT_VOLTAGE);
     }
 
-    public void indexerOFF(){
+    public void indexerOFF() {
 
     }
 
-    public void innerIntakeWheelsReverse(){
+    public void innerIntakeWheelsReverse() {
 
     }
 
-    public void outerIntakeWheelsReverse(){
+    public void outerIntakeWheelsReverse() {
 
     }
 }

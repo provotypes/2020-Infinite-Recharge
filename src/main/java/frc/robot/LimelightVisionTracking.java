@@ -26,17 +26,17 @@ public class LimelightVisionTracking {
         return instance;
     }
 
-    public double getHorizontalAngle(){
+    public double getHorizontalAngle() {
         double horizontalAngle = tx.getDouble(0.0);
         return horizontalAngle;
     } 
 
-    public double getDistance(){
+    public double getDistance() {
         double distance = REL_TARGET_HEIGHT/Math.tan(MOUNT_ANGLE + ty.getDouble(0.0));
         return distance;
     }
 
-    public boolean isthereatarget(){
+    public boolean targetFound() {
         return tv.getBoolean(true);
     }
 

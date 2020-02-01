@@ -1,6 +1,5 @@
 package frc.robot;
 
-
 /**
  * Describes a Logitech Gamepad Controller.  This type of controller is used
  * for driver control, and it simplifies and abstracts the raw joystick.
