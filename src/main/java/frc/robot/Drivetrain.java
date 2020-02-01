@@ -1,11 +1,13 @@
 package frc.robot;
 
 import com.analog.adis16470.frc.ADIS16470_IMU;
+import com.analog.adis16470.frc.ADIS16470_IMU.IMUAxis;
 import com.revrobotics.*;
 import com.revrobotics.CANEncoder;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.easypath.EasyPathDrivetrain;
 
 public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain {
@@ -16,11 +18,11 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
     private static CANEncoder frontRightEncoder;
     private static CANEncoder rearRightEncoder;
   
-    private static CANSparkMax frontLeft = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static CANSparkMax frontLeft = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
     private static CANSparkMax rearLeft = new CANSparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
-	private	static CANSparkMax frontRight = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
+	private	static CANSparkMax frontRight = new CANSparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless);
 	private	static CANSparkMax rearRight = new CANSparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
-     
+    
     private static SpeedControllerGroup leftGroup = new SpeedControllerGroup(frontLeft, rearLeft);
     private static SpeedControllerGroup rightGroup = new SpeedControllerGroup(frontRight, rearRight);
 
@@ -31,15 +33,16 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
     private Drivetrain() {
         super(leftGroup, rightGroup);
         frontLeftEncoder = frontLeft.getEncoder();
-        frontLeftEncoder = rearLeft.getEncoder();
-        frontLeftEncoder = frontRight.getEncoder();
-        frontLeftEncoder = rearRight.getEncoder();
+        rearLeftEncoder = rearLeft.getEncoder();
+        frontRightEncoder = frontRight.getEncoder();
+        rearRightEncoder = rearRight.getEncoder();
 
         frontLeftEncoder.setPositionConversionFactor(DISTANCE_PER_ROTATION);
         rearLeftEncoder.setPositionConversionFactor(DISTANCE_PER_ROTATION);
         frontRightEncoder.setPositionConversionFactor(DISTANCE_PER_ROTATION);
         rearRightEncoder.setPositionConversionFactor(DISTANCE_PER_ROTATION);
         resetEncodersAndGyro();
+        IMU.setYawAxis(IMUAxis.kY);
     }
     
     public static Drivetrain getInstance() {
@@ -100,6 +103,11 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
     public void antiTippingMechanism() {
         double turningValue = (IMU.getAngle()) * kP;
         tankDrive(turningValue, turningValue);
+    }
+
+    public void putSmartDashInfo() {
+        SmartDashboard.putNumber("gyro y", IMU.getAngle());
+        SmartDashboard.putData(IMU);
     }
 
 }
