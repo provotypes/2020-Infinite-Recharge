@@ -57,9 +57,14 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {}
 
+  @Override
+  public void testInit() {
+    drivetrain.calibrateGyro();
+  }
+
 	@Override
 	public void testPeriodic() {
-    drivetrain.antiTippingMechanism();
+    
   }
 
 
