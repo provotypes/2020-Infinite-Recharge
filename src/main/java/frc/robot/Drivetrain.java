@@ -16,10 +16,10 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
     private static CANEncoder frontRightEncoder;
     private static CANEncoder rearRightEncoder;
   
-    private static CANSparkMax frontLeft = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
-    private static CANSparkMax rearLeft = new CANSparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
-	private	static CANSparkMax frontRight = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
-	private	static CANSparkMax rearRight = new CANSparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static CANSparkMax frontLeft = new CANSparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static CANSparkMax rearLeft = new CANSparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless);
+	private	static CANSparkMax frontRight = new CANSparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
+	private	static CANSparkMax rearRight = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
      
     private static SpeedControllerGroup leftGroup = new SpeedControllerGroup(frontLeft, rearLeft);
     private static SpeedControllerGroup rightGroup = new SpeedControllerGroup(frontRight, rearRight);
@@ -31,9 +31,9 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
     private Drivetrain() {
         super(leftGroup, rightGroup);
         frontLeftEncoder = frontLeft.getEncoder();
-        frontLeftEncoder = rearLeft.getEncoder();
-        frontLeftEncoder = frontRight.getEncoder();
-        frontLeftEncoder = rearRight.getEncoder();
+        rearLeftEncoder = rearLeft.getEncoder();
+        frontRightEncoder = frontRight.getEncoder();
+        rearRightEncoder = rearRight.getEncoder();
 
         frontLeftEncoder.setPositionConversionFactor(DISTANCE_PER_ROTATION);
         rearLeftEncoder.setPositionConversionFactor(DISTANCE_PER_ROTATION);
@@ -93,8 +93,8 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
         IMU.calibrate();
     }
 
-    public void safeArcade() {
-
+    public void safeArcade(double speed, double turn) {
+        arcadeDrive(speed, turn, true);
     }
 
     public void antiTippingMechanism() {

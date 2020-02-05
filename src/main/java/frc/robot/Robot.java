@@ -16,6 +16,7 @@ public class Robot extends TimedRobot {
   private ControlPanelMechanism controlPanelSpinner = ControlPanelMechanism.getInstance();
   private Drivetrain drivetrain = Drivetrain.getInstance();
   private IntakeMechanism intake = IntakeMechanism.getInstance();
+  private TeleopController teleopController = TeleopController.getInstance();
   private TaskInterface autoRoutine;
   private boolean isTaskRunning = false;
 
@@ -24,13 +25,12 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     colorSensor.matchColors();
+    teleopController.TeleopInit();
   }
 
   
 	@Override
-	public void robotPeriodic() {
-		colorSensor.ourColor();
-	}
+	public void robotPeriodic() {}
 
   
   @Override
@@ -54,7 +54,12 @@ public class Robot extends TimedRobot {
   }
 
 	@Override
-	public void teleopPeriodic() {}
+	public void teleopPeriodic() {
+    colorSensor.ourColor();
+    teleopController.update();
+
+
+  }
 
 	@Override
 	public void testPeriodic() {}
