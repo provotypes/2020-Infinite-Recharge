@@ -30,7 +30,10 @@ public class Robot extends TimedRobot {
 
   
 	@Override
-	public void robotPeriodic() {}
+	public void robotPeriodic() {
+    colorSensor.ourColor();
+    drivetrain.putSmartDashInfo();
+	}
 
   
   @Override
@@ -61,8 +64,15 @@ public class Robot extends TimedRobot {
 
   }
 
+  @Override
+  public void testInit() {
+    drivetrain.calibrateGyro();
+  }
+
 	@Override
-	public void testPeriodic() {}
+	public void testPeriodic() {
+    
+  }
 
 
 }

@@ -1,11 +1,14 @@
 package frc.robot;
 
 import com.analog.adis16470.frc.ADIS16470_IMU;
+import com.analog.adis16470.frc.ADIS16470_IMU.ADIS16470CalibrationTime;
+import com.analog.adis16470.frc.ADIS16470_IMU.IMUAxis;
 import com.revrobotics.*;
 import com.revrobotics.CANEncoder;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.easypath.EasyPathDrivetrain;
 
 public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain {
@@ -25,7 +28,7 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
     private static SpeedControllerGroup rightGroup = new SpeedControllerGroup(frontRight, rearRight);
 
     private static Drivetrain instance;
-    private static ADIS16470_IMU IMU = new ADIS16470_IMU();
+    private static IMUAngleTracker IMU = new IMUAngleTracker();
     private static double kP; // figure out later
 
     private Drivetrain() {
@@ -40,6 +43,9 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
         frontRightEncoder.setPositionConversionFactor(DISTANCE_PER_ROTATION);
         rearRightEncoder.setPositionConversionFactor(DISTANCE_PER_ROTATION);
         resetEncodersAndGyro();
+        IMU.setYawAxis(IMUAxis.kZ);
+        // IMU.configCalTime(ADIS16470CalibrationTime._64s);
+        IMU.calibrate();
     }
     
     public static Drivetrain getInstance() {
@@ -100,6 +106,14 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
     public void antiTippingMechanism() {
         double turningValue = (IMU.getAngle()) * kP;
         tankDrive(turningValue, turningValue);
+    }
+
+    public void putSmartDashInfo() {
+        SmartDashboard.putNumber("ADIS default angle (Z)", IMU.getAngle());
+        SmartDashboard.putNumber("wraper X", IMU.getXAngle());
+        SmartDashboard.putNumber("wraper Y", IMU.getYAngle());
+        SmartDashboard.putNumber("wraper Z", IMU.getZAngle());
+        SmartDashboard.putData(IMU);
     }
 
 }
