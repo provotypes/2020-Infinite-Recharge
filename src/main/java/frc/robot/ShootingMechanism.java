@@ -18,13 +18,12 @@ import frc.robot.IntakeMechanism.IntakeMechanismModes;
 public class ShootingMechanism {
         
     private static ShootingMechanism instance;
-    private LimelightVisionTracking vision = LimelightVisionTracking.getInstance();
+    private LimelightVisionTracking limelight = LimelightVisionTracking.getInstance();
     
     private VictorSPX ballFeeder = new VictorSPX(1);
     private CANSparkMax shooter = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
     private CANSparkMax shooter_b = new CANSparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless);
     //These motor controllers have enocders in them
-    private TalonSRX turret = new TalonSRX(1);
     private TalonSRX hood = new TalonSRX(2);
     private CANEncoder shooterEncoder = shooter.getEncoder();
     private CANPIDController pidController;
@@ -35,12 +34,12 @@ public class ShootingMechanism {
     private final double SHOOTER_I_ZONE = 0;
     private final double FEED_FORWARD = 0;
     
-    private double turretAngle;
     private double hoodDistance;
     private final double FLY_WHEEL_SPEED = 3000;
     private double FLY_WHEEL_SPEED_MIN = FLY_WHEEL_SPEED - 200;
     private final double BALL_FEEDER_SPEED = 0.5;
     private final double SHOOTER_DEFAULT_SPEED = 0.7;
+    private final  double drivetrainAngleThreshhold = 0.5;
 
     private ShootingMechanism() {
         shooter_b.follow(shooter);
@@ -56,74 +55,74 @@ public class ShootingMechanism {
     }
 
     public static ShootingMechanism getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new ShootingMechanism();
         }
-        return instance;
-        }
+            return instance;
+    }
 
     enum ShooterMechanismModes {
         shoot,
         off; // upon release in teleop
     }
 
- private ShooterMechanismModes shooterMechanismModes = ShooterMechanismModes.off;
+    private ShooterMechanismModes shooterMechanismModes = ShooterMechanismModes.off;
+    
+    final Map<ShooterMechanismModes, Runnable> shootingModes = Map.ofEntries(
+                entry(ShooterMechanismModes.off, this::executeOff),
+                entry(ShooterMechanismModes.shoot, this::executeShoot)
+    );
 
     public void update() {
-	    final Map<ShooterMechanismModes, Runnable> shootingModes = Map.ofEntries(
-			entry(ShooterMechanismModes.off, this::executeOff),
-			entry(ShooterMechanismModes.shoot, this::executeShoot)
-	    );
+        shootingModes.get(shooterMechanismModes).run();
     }
+
     private void aim() {
-        if (vision.targetFound()) {
-            hoodDistance = vision.getDistance();
-            turretAngle = vision.getHorizontalAngle();
+        if (limelight.targetFound()) {
+            hoodDistance = limelight.getDistance();
+            //do pid to set the hood angle using the big equation
+            //end up wiht something like hood angle true = good , false = not ready
         }
     }
 
-    public void off() {
+    private void off() {
         this.shooterMechanismModes = shooterMechanismModes.off;
     }
 
-    public void executeOff() {
+    private void executeOff() {
         shooterOFF();
         ballFeederOFF();
     }
 
-    public void shoot() {
+    private void shoot() {
         this.shooterMechanismModes = shooterMechanismModes.shoot;
-        aim();
-        startBallFeeder();
     }
 
     public void executeShoot() {
         shooterON();
         ballFeederON();
+         // if (limelight.getHorizontalAngle() <= drivetrainAngleThreshhold && aim()){
+                if (shooterEncoder.getVelocity() > FLY_WHEEL_SPEED_MIN ) {
+                    ballFeederON();
+                } else {
+                    ballFeederOFF();
+                }
+        // }
     }   
 
-    public void startBallFeeder() {
-        if (shooterEncoder.getVelocity() > FLY_WHEEL_SPEED_MIN ) {
-            ballFeederON();
-        } else {
-            ballFeederOFF();
-        }
-    }
-
-    public void ballFeederON() {
+    private void ballFeederON() {
         ballFeeder.set(ControlMode.PercentOutput, BALL_FEEDER_SPEED);
     }
 
-    public void ballFeederOFF() {
+    private void ballFeederOFF() {
 
     }
 
-    public void shooterON() {
+    private void shooterON() {
         pidController.setReference(FLY_WHEEL_SPEED, ControlType.kVelocity);
     }
 
-    public void shooterOFF() {
+    private void shooterOFF() {
 
     }
-
 }

@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.easypath.EasyPathDrivetrain;
 
 public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain {
+   
     public static final double DISTANCE_PER_ROTATION = 1.0d/8.45d * 6.0d * Math.PI; // inches //Find Specific 2020 # later
 
     private static CANEncoder frontLeftEncoder;
@@ -21,15 +22,20 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
   
     private static CANSparkMax frontLeft = new CANSparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
     private static CANSparkMax rearLeft = new CANSparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless);
-	private	static CANSparkMax frontRight = new CANSparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
-	private	static CANSparkMax rearRight = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
+	private static CANSparkMax frontRight = new CANSparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
+	private static CANSparkMax rearRight = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
      
     private static SpeedControllerGroup leftGroup = new SpeedControllerGroup(frontLeft, rearLeft);
     private static SpeedControllerGroup rightGroup = new SpeedControllerGroup(frontRight, rearRight);
 
     private static Drivetrain instance;
-    private static IMUAngleTracker IMU = new IMUAngleTracker();
-    private static double kP; // figure out later
+    private IMUAngleTracker IMU = new IMUAngleTracker();
+    private double xP;
+    private final double MIN_POWER = 0.3;
+    private final double MIN_ANGLE_THRESHOLD = 1;
+    LimelightVisionTracking limelight = LimelightVisionTracking.getInstance();
+
+    private static double kP = 0.006;
 
     private Drivetrain() {
         super(leftGroup, rightGroup);
@@ -46,6 +52,7 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
         IMU.setYawAxis(IMUAxis.kZ);
         // IMU.configCalTime(ADIS16470CalibrationTime._64s);
         IMU.calibrate();
+        SmartDashboard.putNumber("drivetrain_kP", kP);
     }
     
     public static Drivetrain getInstance() {
@@ -103,8 +110,24 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
         arcadeDrive(speed, turn, true);
     }
 
+    public void drvietrainAngleLineup(){
+        kP = SmartDashboard.getNumber("drivetrain_kP", 0);
+        double outputValue = limelight.getHorizontalAngle() * kP;
+
+        if (limelight.getHorizontalAngle() > MIN_ANGLE_THRESHOLD && outputValue < MIN_POWER){
+            outputValue = 0.3;
+        }
+
+        if (limelight.getHorizontalAngle() < -MIN_ANGLE_THRESHOLD && outputValue > -MIN_POWER){
+            outputValue = 0.3;
+        }
+
+        arcadeDrive(0,outputValue, false);
+        SmartDashboard.putNumber("Limelight HorizontalAngleThing",  limelight.getHorizontalAngle());
+    }
+
     public void antiTippingMechanism() {
-        double turningValue = (IMU.getAngle()) * kP;
+        double turningValue = (IMU.getAngle()) * xP;
         tankDrive(turningValue, turningValue);
     }
 
