@@ -60,6 +60,7 @@ public class Robot extends TimedRobot {
 	public void teleopPeriodic() {
     colorSensor.ourColor();
     teleopController.update();
+    shooter.update();
   }
 
   @Override
