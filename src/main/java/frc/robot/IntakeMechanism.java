@@ -3,10 +3,13 @@ package frc.robot;
 import java.util.Map;
 import static java.util.Map.entry;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 public class IntakeMechanism {
+
+    private static final double INDEXER_PERCENT = 0.6;
     
     private static IntakeMechanism instance;
     //Port numbers are inaccurate
@@ -34,10 +37,7 @@ public class IntakeMechanism {
         off
     }
 
-    private IntakeMechanismModes intakeMechanismModes = IntakeMechanismModes.off;
-
-    public void update() {
-	    final Map<IntakeMechanismModes, Runnable> intakeModes = Map.ofEntries(
+    final Map<IntakeMechanismModes, Runnable> intakeModes = Map.ofEntries(
 			entry(IntakeMechanismModes.off, this::executeOff),
 			entry(IntakeMechanismModes.outerIntakeOn, this::executeOuterIntakeOn),
 			entry(IntakeMechanismModes.bothIntakesOn, this::executeBothIntakesOn),
@@ -45,29 +45,34 @@ public class IntakeMechanism {
 			entry(IntakeMechanismModes.indexer, this::executeIndexer),
 			entry(IntakeMechanismModes.reverse, this::executeReverse)
 	    );
+
+    private IntakeMechanismModes mode = IntakeMechanismModes.off;
+
+    public void update() {
+	    intakeModes.get(mode).run();
     }
     public void off() {
-        this.intakeMechanismModes = IntakeMechanismModes.off;
+        this.mode = IntakeMechanismModes.off;
     }
 
     public void outerIntakeOn() {
-        this.intakeMechanismModes = IntakeMechanismModes.outerIntakeOn;
+        this.mode = IntakeMechanismModes.outerIntakeOn;
     }
 
     public void bothIntakesOn() {
-        this.intakeMechanismModes = IntakeMechanismModes.bothIntakesOn;
+        this.mode = IntakeMechanismModes.bothIntakesOn;
     }    
 
     public void indexerAndIntakes() {
-        this.intakeMechanismModes = IntakeMechanismModes.indexerAndIntakes;
+        this.mode = IntakeMechanismModes.indexerAndIntakes;
     }
 
     public void indexer() {
-        this.intakeMechanismModes = IntakeMechanismModes.indexer;
+        this.mode = IntakeMechanismModes.indexer;
     }
 
     public void reverse() {
-        this.intakeMechanismModes = IntakeMechanismModes.reverse;
+        this.mode = IntakeMechanismModes.reverse;
     }
 
     public void executeOff() {
@@ -124,11 +129,11 @@ public class IntakeMechanism {
     }
 
     public void indexerON() {
-        //indexer.set(ControlMode., INDEXER_PERCENT_VOLTAGE);
+        indexer.set(ControlMode.PercentOutput, INDEXER_PERCENT);
     }
 
     public void indexerOFF() {
-
+        indexer.set(ControlMode.PercentOutput, 0);
     }
 
     public void innerIntakeWheelsReverse() {

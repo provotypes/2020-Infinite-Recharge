@@ -61,6 +61,7 @@ public class Robot extends TimedRobot {
     colorSensor.ourColor();
     teleopController.update();
     shooter.update();
+    intake.update();
   }
 
   @Override
