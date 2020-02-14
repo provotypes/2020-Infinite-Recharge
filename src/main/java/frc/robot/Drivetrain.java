@@ -151,7 +151,6 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
         SmartDashboard.putNumber("wraper X", IMU.getXAngle());
         SmartDashboard.putNumber("wraper Y", IMU.getYAngle());
         SmartDashboard.putNumber("wraper Z", IMU.getZAngle());
-        SmartDashboard.putData(IMU);
     }
 
 }
