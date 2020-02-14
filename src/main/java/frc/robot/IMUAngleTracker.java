@@ -34,22 +34,37 @@ public class IMUAngleTracker extends ADIS16470_IMU {
 		long thisTime;
 		double dt = 0.0;
 
+		double lastX = super.getGyroInstantX();
+		double lastY = super.getGyroInstantY();
+		double lastZ = super.getGyroInstantZ();
+
+		double thisX = super.getGyroInstantX();
+		double thisY = super.getGyroInstantY();
+		double thisZ = super.getGyroInstantZ();
+
 		while (true) {
 			try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			thisTime = System.nanoTime();
-			dt = (thisTime - lastTime) / 1000000000.0d;
-			
+
+			thisX = super.getGyroInstantX();
+			thisY = super.getGyroInstantY();
+			thisZ = super.getGyroInstantZ();
 
 			synchronized (this) {
-				XAngle += super.getGyroInstantX() * dt;
-				YAngle += super.getGyroInstantY() * dt;
-				ZAngle += super.getGyroInstantZ() * dt;
+				thisTime = System.nanoTime();
+				dt = (thisTime - lastTime) / 1000000000.0d;
+
+				XAngle += ((lastX + thisX) / 2) * dt;
+				YAngle += ((lastY + thisY) / 2) * dt;
+				ZAngle += ((lastZ + thisZ) / 2) * dt;
 			}
 
+			lastX = thisX;
+			lastY = thisY;
+			lastZ = thisZ;
 			lastTime = thisTime;
 
 		}
