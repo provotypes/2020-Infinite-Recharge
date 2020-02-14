@@ -31,11 +31,11 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
     private static Drivetrain instance;
     private IMUAngleTracker IMU = new IMUAngleTracker();
     private double xP;
-    private final double MIN_POWER = 0.3;
-    private final double MIN_ANGLE_THRESHOLD = 1;
+    private final double MIN_POWER = 0.21;
+    private final double MIN_ANGLE_THRESHOLD = 2;
     LimelightVisionTracking limelight = LimelightVisionTracking.getInstance();
 
-    private static double kP = 0.006;
+    private static double kP = 0.005;
 
     private Drivetrain() {
         super(leftGroup, rightGroup);
@@ -116,16 +116,28 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
     public void drvietrainAngleLineup(){
         kP = SmartDashboard.getNumber("drivetrain_kP", 0);
         double outputValue = limelight.getHorizontalAngle() * kP;
+        // double outputValue = Math.signum(limelight.getHorizontalAngle()) * MIN_POWER;
 
-        if (limelight.getHorizontalAngle() > MIN_ANGLE_THRESHOLD && outputValue < MIN_POWER){
+        if (outputValue > 0.07 & outputValue < 0.3){
             outputValue = 0.3;
         }
 
-        if (limelight.getHorizontalAngle() < -MIN_ANGLE_THRESHOLD && outputValue > -MIN_POWER){
-            outputValue = 0.3;
+        if (outputValue < -0.07 & outputValue > -0.3){
+            outputValue = -0.3;
+        }
+        // if (limelight.getHorizontalAngle() > MIN_ANGLE_THRESHOLD && outputValue < MIN_POWER){
+        //     outputValue = MIN_POWER;
+        // }
+
+        // if (limelight.getHorizontalAngle() < -MIN_ANGLE_THRESHOLD && outputValue > -MIN_POWER){
+        //     outputValue = -MIN_POWER;
+        // }
+
+        if (limelight.getHorizontalAngle() < MIN_ANGLE_THRESHOLD && limelight.getHorizontalAngle() > -MIN_ANGLE_THRESHOLD) {
+            outputValue = 0;
         }
 
-        arcadeDrive(0,outputValue, false);
+        arcadeDrive(0, outputValue, false);
         SmartDashboard.putNumber("Limelight HorizontalAngleThing",  limelight.getHorizontalAngle());
     }
 

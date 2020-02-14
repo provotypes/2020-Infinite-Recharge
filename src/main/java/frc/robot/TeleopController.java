@@ -42,7 +42,7 @@ public class TeleopController {
         // operatorController.bindButtonToggle(LogitechOperatorController.TRIGGER, 
         //          this::limelightShooting, () -> {isHumanControlled = true;});
         operatorController.bindButton(LogitechOperatorController.TRIGGER, this::limelightShooting);
-        operatorController.bindButtonRelease(LogitechOperatorController.TRIGGER, () -> {isHumanControlled = true;});
+        operatorController.bindButtonRelease(LogitechOperatorController.TRIGGER, () -> {isHumanControlled = true; shootingMech.off();});
         operatorController.bindButtonToggle(LogitechOperatorController.THUMB_BUTTON, 
                  intakeMech::indexer, intakeMech::off); 
         operatorController.bindButtonToggle(LogitechOperatorController.TOP_LEFT_BASE_BUTTON, 
@@ -77,7 +77,7 @@ public class TeleopController {
     private void limelightShooting(){
         isHumanControlled = false;
         drivetrain.drvietrainAngleLineup();
-        // shootingMech.executeShoot();
+        shootingMech.shoot();
     }
 
 }
