@@ -19,7 +19,7 @@ public class Robot extends TimedRobot {
   private TeleopController teleopController = TeleopController.getInstance();
   private TaskInterface autoRoutine;
   private boolean isTaskRunning = false;
-
+  private LimelightVisionTracking limelight = LimelightVisionTracking.getInstance();
   private static ColorSensor colorSensor = ColorSensor.getInstance();
   
   @Override
@@ -33,7 +33,9 @@ public class Robot extends TimedRobot {
 	public void robotPeriodic() {
     colorSensor.ourColor();
     drivetrain.putSmartDashInfo();
-	}
+    SmartDashboard.putNumber("Limelight Distance", limelight.getDistance());
+    limelight.optimizedDistance();
+  }
 
   
   @Override
