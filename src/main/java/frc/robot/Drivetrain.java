@@ -6,6 +6,7 @@ import com.analog.adis16470.frc.ADIS16470_IMU.IMUAxis;
 import com.revrobotics.*;
 import com.revrobotics.CANEncoder;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,7 +32,7 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
     private static Drivetrain instance;
     private IMUAngleTracker IMU = new IMUAngleTracker();
     private double xP;
-    private final double MIN_POWER = 0.21;
+    private final double MIN_POWER = 0.05;
     private final double MIN_ANGLE_THRESHOLD = 2;
     LimelightVisionTracking limelight = LimelightVisionTracking.getInstance();
 
@@ -112,29 +113,16 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
 
     public void drvietrainAngleLineup(){
         kP = SmartDashboard.getNumber("drivetrain_kP", 0);
-        double outputValue = limelight.getHorizontalAngle() * kP;
-        // double outputValue = Math.signum(limelight.getHorizontalAngle()) * MIN_POWER;
+        double outputValue = 0.0;
+        double tx = limelight.getHorizontalAngle();
 
-        if (outputValue > 0.07 & outputValue < 0.3){
-            outputValue = 0.3;
+        if (tx > 1.0) {
+            outputValue = (-tx * kP) - MIN_POWER;
+        } else if (tx < 1.0) {
+            outputValue = (-tx * kP) + MIN_POWER;
         }
 
-        if (outputValue < -0.07 & outputValue > -0.3){
-            outputValue = -0.3;
-        }
-        // if (limelight.getHorizontalAngle() > MIN_ANGLE_THRESHOLD && outputValue < MIN_POWER){
-        //     outputValue = MIN_POWER;
-        // }
-
-        // if (limelight.getHorizontalAngle() < -MIN_ANGLE_THRESHOLD && outputValue > -MIN_POWER){
-        //     outputValue = -MIN_POWER;
-        // }
-
-        if (limelight.getHorizontalAngle() < MIN_ANGLE_THRESHOLD && limelight.getHorizontalAngle() > -MIN_ANGLE_THRESHOLD) {
-            outputValue = 0;
-        }
-
-        arcadeDrive(0, outputValue, false);
+        arcadeDrive(0, -outputValue, false);
         SmartDashboard.putNumber("Limelight HorizontalAngleThing",  limelight.getHorizontalAngle());
     }
 

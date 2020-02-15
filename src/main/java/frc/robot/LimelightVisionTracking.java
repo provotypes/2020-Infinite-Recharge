@@ -8,7 +8,7 @@ public class LimelightVisionTracking {
 
     private static LimelightVisionTracking instance;
     private NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-    private NetworkTableEntry tx = table.getEntry("tx");
+    private  NetworkTableEntry tx = table.getEntry("tx");
     private NetworkTableEntry ty = table.getEntry("ty");
     private NetworkTableEntry tv = table.getEntry("tv");
 
