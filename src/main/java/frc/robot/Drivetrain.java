@@ -52,8 +52,9 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
         resetEncodersAndGyro();
         IMU.setYawAxis(IMUAxis.kZ);
         // IMU.configCalTime(ADIS16470CalibrationTime._64s);
-        IMU.calibrate();
+
         SmartDashboard.putNumber("drivetrain_kP", kP);
+        // IMU.calibrate();
     }
     
     public static Drivetrain getInstance() {
@@ -104,6 +105,8 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
 	}
 
 	public void calibrateGyro() {
+        IMU.configCalTime(ADIS16470CalibrationTime._64s);
+        // IMU.calibrate();
         IMU.calibrate();
     }
 
@@ -136,7 +139,6 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
         SmartDashboard.putNumber("wraper X", IMU.getXAngle());
         SmartDashboard.putNumber("wraper Y", IMU.getYAngle());
         SmartDashboard.putNumber("wraper Z", IMU.getZAngle());
-        SmartDashboard.putData(IMU);
     }
 
 }
