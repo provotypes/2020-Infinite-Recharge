@@ -9,8 +9,13 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 public class IntakeMechanism {
 
-    private static final double INDEXER_PERCENT = 0.6;
-    
+    private final double INDEXER_PERCENT = 0.5;
+    private final double INDEXER_REVERSE = 0.5;
+    private final double OUTER_INTAKE_PERCENT = 0.5;
+    private final double INNER_INTAKE_PERCENT = 0.5;
+    private final double OUTER_INTAKE_REVERSE = 1; 
+    private final double INNER_INTAKE_REVERSE = 1;
+    private final double OUTER_INTAKE_REVERSE_LOW = 0.1;
     private static IntakeMechanism instance;
     //Port numbers are inaccurate
     private static TalonSRX outerIntakeWheels = new TalonSRX(1);
@@ -26,21 +31,18 @@ public class IntakeMechanism {
         return instance;
     }
     
-    //It will probably make no sense to have only one of the
-    // intakes on as the ball would not make it through to the indexer.
     enum IntakeMechanismModes {
-        outerIntakeOn,
         bothIntakesOn,
         indexerAndIntakes,
         indexer,
         reverse,
+        intakeIdle,
         off
     }
 
     final Map<IntakeMechanismModes, Runnable> intakeModes = Map.ofEntries(
 			entry(IntakeMechanismModes.off, this::executeOff),
-			entry(IntakeMechanismModes.outerIntakeOn, this::executeOuterIntakeOn),
-			entry(IntakeMechanismModes.bothIntakesOn, this::executeBothIntakesOn),
+			entry(IntakeMechanismModes.intakeIdle, this::executeIntakeIdle),
 			entry(IntakeMechanismModes.indexerAndIntakes, this::executeIndexerAndIntakes),
 			entry(IntakeMechanismModes.indexer, this::executeIndexer),
 			entry(IntakeMechanismModes.reverse, this::executeReverse)
@@ -51,17 +53,14 @@ public class IntakeMechanism {
     public void update() {
 	    intakeModes.get(mode).run();
     }
+
     public void off() {
         this.mode = IntakeMechanismModes.off;
     }
 
-    public void outerIntakeOn() {
-        this.mode = IntakeMechanismModes.outerIntakeOn;
+    public void intakeIdle() {
+        this.mode = IntakeMechanismModes.intakeIdle;
     }
-
-    public void bothIntakesOn() {
-        this.mode = IntakeMechanismModes.bothIntakesOn;
-    }    
 
     public void indexerAndIntakes() {
         this.mode = IntakeMechanismModes.indexerAndIntakes;
@@ -74,73 +73,76 @@ public class IntakeMechanism {
     public void reverse() {
         this.mode = IntakeMechanismModes.reverse;
     }
-
-    public void executeOff() {
+  
+    private void executeOff() {  
         outerIntakeWheelsOFF();
         innerIntakeWheelsOFF();
         indexerOFF();
     }
 
-    public void executeOuterIntakeOn() {
-        outerIntakeWheelsON();
+    private void executeIntakeIdle() {
+        outerIntakeWheelsReverseLow();
         innerIntakeWheelsOFF();
-     // indexerON();
+        indexerOFF();
     }
 
-    public void executeBothIntakesOn() {
-        outerIntakeWheelsON();
-        innerIntakeWheelsON();
-        // indexerOFF(); if indexer is on then it 
-        // would be the same as the following state  
-    }
-
-    public void executeIndexerAndIntakes() {
+    private void executeIndexerAndIntakes() {
         outerIntakeWheelsON();
         innerIntakeWheelsON();
         indexerON();
     }
 
-    public void executeIndexer() {
-        innerIntakeWheelsOFF();
-        outerIntakeWheelsReverse();
+    private void executeIndexer() {
+        innerIntakeWheelsON();
+        outerIntakeWheelsReverseLow();
         indexerON();
     }
 
-    public void executeReverse() {
+    private void executeReverse() {
         innerIntakeWheelsReverse();
         outerIntakeWheelsReverse();
-     // indexerOFF();
+        indexerReverse();
     }
 
-    public void outerIntakeWheelsON() {
-
+    private void outerIntakeWheelsON() {
+        outerIntakeWheels.set(ControlMode.PercentOutput, OUTER_INTAKE_PERCENT);
     }
 
-    public void outerIntakeWheelsOFF() {
-
+    private void outerIntakeWheelsOFF() {
+        outerIntakeWheels.set(ControlMode.PercentOutput, 0);
     }
 
-    public void innerIntakeWheelsON() {
-
+    // This will be constantly running when intake is off
+    private void outerIntakeWheelsReverseLow() {
+        outerIntakeWheels.set(ControlMode.PercentOutput, OUTER_INTAKE_REVERSE_LOW);
     }
 
-    public void innerIntakeWheelsOFF() {
-
+    // This along with inner intake wheels reverse will have a dedicated button in case we jam
+    private void outerIntakeWheelsReverse() {
+        outerIntakeWheels.set(ControlMode.PercentOutput, OUTER_INTAKE_REVERSE);
+    }
+   
+    private void innerIntakeWheelsON() {
+        innerIntakeWheels.set(ControlMode.PercentOutput, INNER_INTAKE_PERCENT);
     }
 
-    public void indexerON() {
+    private void innerIntakeWheelsOFF() {
+        innerIntakeWheels.set(ControlMode.PercentOutput, 0);
+    }
+
+    private void innerIntakeWheelsReverse() {
+        innerIntakeWheels.set(ControlMode.PercentOutput, INNER_INTAKE_REVERSE);
+    }
+
+    private void indexerON() {
         indexer.set(ControlMode.PercentOutput, INDEXER_PERCENT);
     }
 
-    public void indexerOFF() {
+    private void indexerOFF() {
         indexer.set(ControlMode.PercentOutput, 0);
     }
 
-    public void innerIntakeWheelsReverse() {
-
-    }
-
-    public void outerIntakeWheelsReverse() {
-
+    private void indexerReverse() {
+        indexer.set(ControlMode.PercentOutput, INDEXER_REVERSE);
     }
 }
