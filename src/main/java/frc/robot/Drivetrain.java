@@ -32,7 +32,7 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
     private static Drivetrain instance;
     private IMUAngleTracker IMU = new IMUAngleTracker();
     private double xP;
-    private final double MIN_POWER = 0.04;
+    private final double MIN_POWER = 0.02;
     private final double MIN_ANGLE_THRESHOLD = 2;
     LimelightVisionTracking limelight = LimelightVisionTracking.getInstance();
 
