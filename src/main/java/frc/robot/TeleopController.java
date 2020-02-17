@@ -37,29 +37,27 @@ public class TeleopController {
 
     public void TeleopInit() {
         System.out.println("Teleop has started!");
-        // Pick between buttons 3,4,5,6 for the climber. It would be best if they weren't in the base of the controller.
-        // We don't want to hit the climber button by accident. Maybe do something like press both 3,4 at the same time?
-        // operatorController.bindButtonToggle(LogitechOperatorController.TRIGGER, 
-        //          this::limelightShooting, () -> {isHumanControlled = true;});
+    
         operatorController.bindButton(LogitechOperatorController.TRIGGER, this::limelightShooting);
         operatorController.bindButtonRelease(LogitechOperatorController.TRIGGER, () -> {isHumanControlled = true; shootingMech.off();});
         operatorController.bindButtonToggle(LogitechOperatorController.THUMB_BUTTON, 
                  intakeMech::indexer, intakeMech::off); 
+        operatorController.bindButtonPress(LogitechOperatorController.BOTTOM_LEFT_BASE_BUTTON, intakeMech::off);
+        operatorController.bindButtonPress(LogitechOperatorController.BOTTOM_RIGHT_BASE_BUTTON, intakeMech::off);
         operatorController.bindButtonToggle(LogitechOperatorController.TOP_LEFT_BASE_BUTTON, 
-                 intakeMech::indexerAndIntakes, intakeMech::off);  
+                 intakeMech::indexerAndIntakes, intakeMech::intakeIdle);  
         operatorController.bindButtonToggle(LogitechOperatorController.TOP_RIGHT_BASE_BUTTON, 
-                 intakeMech::bothIntakesOn, intakeMech::off); 
+                 intakeMech::indexerAndIntakes, intakeMech::intakeIdle); 
         operatorController.bindButtonToggle(LogitechOperatorController.MIDDLE_LEFT_BASE_BUTTON, 
-                 intakeMech::reverse, intakeMech::off);
-        operatorController.bindButtonToggle(LogitechOperatorController.MIDDLE_RIGHT_BASE_BUTTON, 
-                 intakeMech::outerIntakeOn, intakeMech::off);
+                 intakeMech::reverse, intakeMech::intakeIdle);
+        operatorController.bindButtonToggle(LogitechOperatorController.MIDDLE_LEFT_BASE_BUTTON, 
+                 intakeMech::reverse, intakeMech::intakeIdle);
         driverController.bindAxes(driverController.LEFT_Y_AXIS, driverController.RIGHT_X_AXIS, this::arcade);
     }
 
     public void update(){
         driverController.run();
         operatorController.run();
-
     }
 
     private void arcade(double speed, double rotation) {
