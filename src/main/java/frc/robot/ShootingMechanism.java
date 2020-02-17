@@ -4,6 +4,7 @@ import java.util.Map;
 import static java.util.Map.entry;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANEncoder;
@@ -35,16 +36,19 @@ public class ShootingMechanism {
     private final double SHOOTER_KI = 1e-6;
     private final double SHOOTER_KD = 0;
     private final double SHOOTER_I_ZONE = 0;
-    private final double FEED_FORWARD = 0;
+    private final double FEED_FORWARD = 0.4;
     
     private double hoodDistance;
-    private final double FLY_WHEEL_SPEED = -3000;
-    private double FLY_WHEEL_SPEED_MIN = FLY_WHEEL_SPEED + 200;
-    private final double BALL_FEEDER_SPEED = 0.5;
+    private final double FLY_WHEEL_SPEED = -2000;
+    private double FLY_WHEEL_SPEED_MIN = FLY_WHEEL_SPEED + 20;
+    private final double BALL_FEEDER_SPEED = 0.3;
     private final double SHOOTER_DEFAULT_SPEED = 0.7;
     private final  double drivetrainAngleThreshhold = 0.5;
 
     private ShootingMechanism() {
+
+        ballFeeder.setNeutralMode(NeutralMode.Brake);
+
         // shooter_b.follow(shooter);
         shooter.setIdleMode(IdleMode.kCoast);
         pidController = shooter.getPIDController();
@@ -54,7 +58,7 @@ public class ShootingMechanism {
         pidController.setD(SHOOTER_KD);
         pidController.setIZone(SHOOTER_I_ZONE);
         pidController.setFF(FEED_FORWARD);
-        pidController.setOutputRange(0, 1);
+        pidController.setOutputRange(-1, 1);
     }
 
     public static ShootingMechanism getInstance() {
@@ -78,6 +82,8 @@ public class ShootingMechanism {
 
     public void update() {
         shootingModes.get(curMode).run();
+        SmartDashboard.putNumber("shooter v", shooterEncoder.getVelocity());
+        SmartDashboard.putNumber("Shooter pow", shooter.get());
     }
 
     private void aim() {
@@ -123,7 +129,7 @@ public class ShootingMechanism {
     private void shooterON() {
         // pidController.setReference(FLY_WHEEL_SPEED, ControlType.kVelocity);
         shooter.set(-0.9);
-        SmartDashboard.putNumber("shooter v", shooterEncoder.getVelocity());
+        
     }
     
 
