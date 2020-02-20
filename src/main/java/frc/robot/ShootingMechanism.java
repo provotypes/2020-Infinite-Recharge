@@ -12,6 +12,7 @@ import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.CANSparkMaxLowLevel;
@@ -28,7 +29,7 @@ public class ShootingMechanism {
     private CANSparkMax shooter = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
     // private CANSparkMax shooter_b = new CANSparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless);
     //These motor controllers have enocders in them
-    private TalonSRX hood = new TalonSRX(2);
+    private Servo hood = new Servo(0);
     private CANEncoder shooterEncoder = shooter.getEncoder();
     private CANPIDController pidController;
    
@@ -39,7 +40,7 @@ public class ShootingMechanism {
     private final double FEED_FORWARD = 0.4;
     
     private double hoodDistance;
-    private final double FLY_WHEEL_SPEED = -2000;
+    private final double FLY_WHEEL_SPEED = ShooterCalculator.calculateRPM(limelight.getDistance());
     private double FLY_WHEEL_SPEED_MIN = FLY_WHEEL_SPEED + 20;
     private final double BALL_FEEDER_SPEED = 0.3;
     private final double SHOOTER_DEFAULT_SPEED = 0.7;
@@ -89,8 +90,6 @@ public class ShootingMechanism {
     private void aim() {
         if (limelight.targetFound()) {
             hoodDistance = limelight.getDistance();
-            //do pid to set the hood angle using the big equation
-            //end up wiht something like hood angle true = good , false = not ready
         }
     }
 
@@ -109,7 +108,7 @@ public class ShootingMechanism {
 
     public void executeShoot() {
         shooterON();
-         // if (limelight.getHorizontalAngle() <= drivetrainAngleThreshhold && aim()){
+        hood.setPosition(ShooterCalculator.calculateAngle(limelight.getDistance()));
                 if (shooterEncoder.getVelocity() < FLY_WHEEL_SPEED_MIN ) {
                     ballFeederON();
                 } else {
