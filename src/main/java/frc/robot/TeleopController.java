@@ -9,12 +9,12 @@ public class TeleopController {
 
     private static TeleopController instance;
    
-    ShootingMechanism shootingMech = ShootingMechanism.getInstance();
-    IntakeMechanism intakeMech = IntakeMechanism.getInstance();
-    LimelightVisionTracking limelight = LimelightVisionTracking.getInstance();
-    ControlPanelMechanism controlPanel = ControlPanelMechanism.getInstance();
-    ClimbingMechanism climber = ClimbingMechanism.getInstance();
-    Drivetrain drivetrain = Drivetrain.getInstance();
+    private ShootingMechanism shootingMech = ShootingMechanism.getInstance();
+    private IntakeMechanism intakeMech = IntakeMechanism.getInstance();
+    private LimelightVisionTracking limelight = LimelightVisionTracking.getInstance();
+    private ControlPanelMechanism controlPanel = ControlPanelMechanism.getInstance();
+    private ClimbingMechanism climber = ClimbingMechanism.getInstance();
+    private Drivetrain drivetrain = Drivetrain.getInstance();
     private LogitechDriverController driverController = new LogitechDriverController(0);
     private LogitechOperatorController operatorController = new LogitechOperatorController(1);
 

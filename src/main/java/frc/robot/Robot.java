@@ -1,13 +1,10 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.TimedRobot;
-
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.autotasks.AutoChooser;
-import frc.robot.autotasks.AutoFactory;
-import frc.robot.autotasks.AutoRoutine;
 import frc.robot.autotasks.TaskInterface;
+import edu.wpi.first.wpilibj.Servo;
 
 public class Robot extends TimedRobot {
 
@@ -17,11 +14,14 @@ public class Robot extends TimedRobot {
   private Drivetrain drivetrain = Drivetrain.getInstance();
   private IntakeMechanism intake = IntakeMechanism.getInstance();
   private TeleopController teleopController = TeleopController.getInstance();
+  private LogitechDriverController driverController = new LogitechDriverController(0);
+  private LogitechOperatorController operatorController = new LogitechOperatorController(1);
+
   private TaskInterface autoRoutine;
   private boolean isTaskRunning = false;
   private LimelightVisionTracking limelight = LimelightVisionTracking.getInstance();
-  private static ColorSensor colorSensor = ColorSensor.getInstance();
-  
+  private ColorSensor colorSensor = ColorSensor.getInstance();
+
   @Override
   public void robotInit() {
     colorSensor.matchColors();
@@ -68,11 +68,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
-    drivetrain.calibrateGyro();
+    // drivetrain.calibrateGyro();
   }
 
 	@Override
 	public void testPeriodic() {  
+
   }
   
 }
