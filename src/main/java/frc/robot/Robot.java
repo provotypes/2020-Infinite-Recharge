@@ -1,6 +1,7 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autotasks.TaskInterface;
@@ -20,8 +21,11 @@ public class Robot extends TimedRobot {
   private TaskInterface autoRoutine;
   private boolean isTaskRunning = false;
   private LimelightVisionTracking limelight = LimelightVisionTracking.getInstance();
-  private ColorSensor colorSensor = ColorSensor.getInstance();
+  private static ColorSensor colorSensor = ColorSensor.getInstance();
 
+  //leds
+  private DigitalOutput ledColor = new DigitalOutput(0);
+  
   @Override
   public void robotInit() {
     colorSensor.matchColors();
@@ -35,6 +39,14 @@ public class Robot extends TimedRobot {
     drivetrain.putSmartDashInfo();
     SmartDashboard.putNumber("Limelight Distance", limelight.getDistance());
     limelight.optimizedDistance();
+
+    if (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue) {
+      ledColor.set(false);
+    }
+    else {
+      ledColor.set(true);
+    }
+
   }
 
   
