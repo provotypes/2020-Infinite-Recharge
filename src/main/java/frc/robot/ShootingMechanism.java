@@ -129,7 +129,7 @@ public class ShootingMechanism {
     private void shooterON() {
         double flyWheelSpeed = ShooterCalculator.calculateRPM(limelight.getDistance());
         // pidController.setReference(FLY_WHEEL_SPEED, ControlType.kVelocity);
-        shooter.set(-0.9);
+        shooter.set(-0.6);
     }
     
 
