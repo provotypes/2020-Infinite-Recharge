@@ -24,8 +24,8 @@ public class TeleopController {
     private final Supplier<Double> speedMultiplierSupplier = () -> SmartDashboard.getNumber("Speed Multiplier", 0.65);
 
     private TeleopController() {
-        SmartDashboard.putNumber("Rotate Multiplier", 0.65);
-        SmartDashboard.putNumber("Speed Multiplier", 0.65);
+        SmartDashboard.putNumber("Rotate Multiplier", 0.97);
+        SmartDashboard.putNumber("Speed Multiplier", 0.97);
     }
 
     public static TeleopController getInstance() {
@@ -66,9 +66,16 @@ public class TeleopController {
             double speedMultiplier = speedMultiplierSupplier.get();
             
             double outSpeed = speedMultiplier * speed;
+            outSpeed = Math.pow(outSpeed, 3);
             double outRotation = rotation * rotateMultiplier;
-            
-            drivetrain.safeArcade(outSpeed, outRotation);
+            outRotation = Math.pow(outRotation, 3);
+
+            if (speed < 0.1 && speed > -0.1) { // cuvature drive with auto quick turn at slow speeds
+                drivetrain.curvatureDrive(outSpeed, -outRotation, true);
+            }
+            else {
+                drivetrain.curvatureDrive(outSpeed, -outRotation, false);
+            }
         }
     }
 

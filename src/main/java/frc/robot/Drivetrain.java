@@ -114,7 +114,7 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
         arcadeDrive(speed, turn, true);
     }
 
-    public void drvietrainAngleLineup(){
+    public void drvietrainAngleLineup() {
         kP = SmartDashboard.getNumber("drivetrain_kP", 0);
         double outputValue = 0.0;
         double tx = limelight.getHorizontalAngle();
