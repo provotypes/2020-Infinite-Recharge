@@ -114,14 +114,14 @@ public class IntakeMechanism {
 
     // This will be constantly running when intake is off
     private void outerIntakeWheelsReverseLow() {
-        outerIntakeWheels.set(ControlMode.PercentOutput, OUTER_INTAKE_REVERSE_LOW);
+        outerIntakeWheels.set(ControlMode.PercentOutput, -OUTER_INTAKE_REVERSE_LOW);
     }
 
     // This along with inner intake wheels reverse will have a dedicated button in case we jam
     private void outerIntakeWheelsReverse() {
         outerIntakeWheels.set(ControlMode.PercentOutput, OUTER_INTAKE_REVERSE);
     }
-   
+
     private void innerIntakeWheelsON() {
         innerIntakeWheels.set(ControlMode.PercentOutput, INNER_INTAKE_PERCENT);
     }
