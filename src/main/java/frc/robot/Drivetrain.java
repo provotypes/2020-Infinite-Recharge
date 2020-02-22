@@ -21,10 +21,10 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
     private static CANEncoder frontRightEncoder;
     private static CANEncoder rearRightEncoder;
   
-    private static CANSparkMax frontLeft = new CANSparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
-    private static CANSparkMax rearLeft = new CANSparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless);
-	private static CANSparkMax frontRight = new CANSparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
-	private static CANSparkMax rearRight = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static CANSparkMax frontLeft = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static CANSparkMax rearLeft = new CANSparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
+	private static CANSparkMax frontRight = new CANSparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
+	private static CANSparkMax rearRight = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
      
     private static SpeedControllerGroup leftGroup = new SpeedControllerGroup(frontLeft, rearLeft);
     private static SpeedControllerGroup rightGroup = new SpeedControllerGroup(frontRight, rearRight);

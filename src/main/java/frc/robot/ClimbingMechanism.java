@@ -6,8 +6,8 @@ public class ClimbingMechanism {
 
 private static ClimbingMechanism instance;
 //Port numbers should be fixed later //Delete this comment when done
-private static TalonSRX climberWinch = new TalonSRX(1);
-private static TalonSRX climberElevator = new TalonSRX(2);
+private static TalonSRX climberWinch = new TalonSRX(6);
+private static TalonSRX climberElevator = new TalonSRX(5);
 
 private ClimbingMechanism() {}
 

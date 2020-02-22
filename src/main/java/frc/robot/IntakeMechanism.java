@@ -18,9 +18,9 @@ public class IntakeMechanism {
     private final double OUTER_INTAKE_REVERSE_LOW = 0.1;
     private static IntakeMechanism instance;
     //Port numbers are inaccurate
-    private static TalonSRX outerIntakeWheels = new TalonSRX(1);
-	private static TalonSRX innerIntakeWheels = new TalonSRX(3);
-    private static TalonSRX indexer = new TalonSRX(2);
+    private static TalonSRX outerIntakeWheels = new TalonSRX(4);
+	private static TalonSRX innerIntakeWheels = new TalonSRX(1);
+    private static TalonSRX indexer = new TalonSRX(3);
    
     private IntakeMechanism() {}
 

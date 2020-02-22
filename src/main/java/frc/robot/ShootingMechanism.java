@@ -12,6 +12,7 @@ import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.hal.sim.DIOSim;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -25,9 +26,9 @@ public class ShootingMechanism {
     private static ShootingMechanism instance;
     private LimelightVisionTracking limelight = LimelightVisionTracking.getInstance();
     
-    private TalonSRX ballFeeder = new TalonSRX(1);
-    private CANSparkMax shooter = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
-    // private CANSparkMax shooter_b = new CANSparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private TalonSRX ballFeeder = new TalonSRX(2);
+    private CANSparkMax shooter = new CANSparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless);
+    // private CANSparkMax shooter_b = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
     //These motor controllers have enocders in them
     private Servo hood = new Servo(0);
     private CANEncoder shooterEncoder = shooter.getEncoder();
@@ -106,7 +107,7 @@ public class ShootingMechanism {
         this.curMode = ShooterMechanismModes.shoot;
     }
 
-    public void executeShoot() {
+    private void executeShoot() {
         shooterON();
         hood.setPosition(ShooterCalculator.calculateAngle(limelight.getDistance()));
                 if (shooterEncoder.getVelocity() < FLY_WHEEL_SPEED_MIN ) {
@@ -126,13 +127,21 @@ public class ShootingMechanism {
     }
 
     private void shooterON() {
+        double flyWheelSpeed = ShooterCalculator.calculateRPM(limelight.getDistance());
         // pidController.setReference(FLY_WHEEL_SPEED, ControlType.kVelocity);
         shooter.set(-0.9);
-        
     }
     
 
     private void shooterOFF() {
         shooter.set(0);
+    }
+
+    public double shooterVelocity(){
+      return shooterEncoder.getVelocity();
+    }
+    
+    public double shooterSetpoint(){
+        return ShooterCalculator.calculateRPM(limelight.getDistance());
     }
 }

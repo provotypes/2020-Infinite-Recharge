@@ -5,11 +5,9 @@ import java.util.List;
 
 public class AutoFactory {
 
-    public static List<TaskInterface> emptyList() {
-        return new ArrayList<TaskInterface>();
-
+    public static List<TaskInterface> test() {
+		List<TaskInterface> taskList = new ArrayList<TaskInterface>();
+        taskList.add(new ShootingMechanismTask(3));
+        return taskList;
     }
-
-
-
 }
