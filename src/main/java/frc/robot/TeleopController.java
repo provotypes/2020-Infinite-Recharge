@@ -24,7 +24,7 @@ public class TeleopController {
     private final Supplier<Double> speedMultiplierSupplier = () -> SmartDashboard.getNumber("Speed Multiplier", 0.65);
 
     private TeleopController() {
-        SmartDashboard.putNumber("Rotate Multiplier", 0.5);
+        SmartDashboard.putNumber("Rotate Multiplier", -0.5);
         SmartDashboard.putNumber("Speed Multiplier", 0.75);
     }
 
@@ -81,7 +81,7 @@ public class TeleopController {
 
     private void limelightShooting(){
         // isHumanControlled = false;
-        // drivetrain.drvietrainAngleLineup();
+        drivetrain.drvietrainAngleLineup();
         shootingMech.shoot();
     }
 

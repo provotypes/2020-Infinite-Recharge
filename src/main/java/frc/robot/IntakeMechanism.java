@@ -13,8 +13,8 @@ public class IntakeMechanism {
     private final double INDEXER_REVERSE = 0.5;
     private final double OUTER_INTAKE_PERCENT = 0.8;
     private final double INNER_INTAKE_PERCENT = 0.5;
-    private final double OUTER_INTAKE_REVERSE = -1.0;
-    private final double INNER_INTAKE_REVERSE = -1.0;
+    private final double OUTER_INTAKE_REVERSE = -6.0;
+    private final double INNER_INTAKE_REVERSE = -6.0;
     private final double OUTER_INTAKE_REVERSE_LOW = 0.0;
     private static IntakeMechanism instance;
     //Port numbers are inaccurate

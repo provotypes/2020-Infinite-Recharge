@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
     colorSensor.ourColor();
     drivetrain.putSmartDashInfo();
     SmartDashboard.putNumber("Limelight Distance", limelight.getDistance());
-    limelight.optimizedDistance();
+    // limelight.optimizedDistance();
 
     if (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue) {
       ledColor.set(false);

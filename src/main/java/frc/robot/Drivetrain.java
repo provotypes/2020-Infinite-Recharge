@@ -49,8 +49,8 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
 		rearRight.setOpenLoopRampRate(0.6);
 		frontRight.setOpenLoopRampRate(0.6);
 		
-		leftGroup.setInverted(true);
-		rightGroup.setInverted(true);
+		leftGroup.setInverted(false);
+		rightGroup.setInverted(false);
 
         frontLeftEncoder = frontLeft.getEncoder();
         rearLeftEncoder = rearLeft.getEncoder();
