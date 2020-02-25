@@ -18,14 +18,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.ControlType;
-
 import frc.robot.IntakeMechanism.IntakeMechanismModes;
 
 public class ShootingMechanism {
         
     private static ShootingMechanism instance;
     private LimelightVisionTracking limelight = LimelightVisionTracking.getInstance();
-    
     private TalonSRX ballFeeder = new TalonSRX(2);
     private CANSparkMax shooter = new CANSparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless);
     // private CANSparkMax shooter_b = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -34,18 +32,21 @@ public class ShootingMechanism {
     private CANEncoder shooterEncoder = shooter.getEncoder();
     private CANPIDController pidController;
    
-    private final double SHOOTER_KP = 5e-5;
-    private final double SHOOTER_KI = 1e-6;
-    private final double SHOOTER_KD = 0;
-    private final double SHOOTER_I_ZONE = 0;
-    private final double FEED_FORWARD = 0.4;
+    private final double SHOOTER_KP = 0.0005;
+    private final double SHOOTER_KI = 0.000001;
+    private final double SHOOTER_KD = 0.0;
+    private final double SHOOTER_I_ZONE = 2000;
+    private final double FEED_FORWARD = 0.000015;
     
     private double hoodDistance;
     private final double FLY_WHEEL_SPEED = ShooterCalculator.calculateRPM(limelight.getDistance());
     private double FLY_WHEEL_SPEED_MIN = FLY_WHEEL_SPEED + 20;
     private final double BALL_FEEDER_SPEED = 0.3;
     private final double SHOOTER_DEFAULT_SPEED = 0.7;
-    private final  double drivetrainAngleThreshhold = 0.5;
+    private final double DRIVE_TRAIN_THRESHOLD = 0.5;
+    private final double MAX_HOOD_POSITION = 0.8;
+    private final double MIN_HOOD_POSITION = 0.1;
+
 
     private ShootingMechanism() {
 
@@ -88,11 +89,20 @@ public class ShootingMechanism {
         SmartDashboard.putNumber("Shooter pow", shooter.get());
     }
 
-    private void aim() {
+    public void hoodPositioning() {
         if (limelight.targetFound()) {
             hoodDistance = limelight.getDistance();
+            double hoodPosition = ShooterCalculator.calculateAngle(hoodDistance);
+            if (hoodPosition > MAX_HOOD_POSITION) {
+                hood.setPosition(MAX_HOOD_POSITION);
+            } else if (hoodPosition < MIN_HOOD_POSITION) {
+                hood.setPosition(MIN_HOOD_POSITION);
+            } else {
+                hood.setPosition(hoodPosition);
+            }
         }
     }
+
 
     public void off() {
         this.curMode = ShooterMechanismModes.off;
@@ -101,6 +111,7 @@ public class ShootingMechanism {
     private void executeOff() {
         shooterOFF();
         ballFeederOFF();
+        hood.setPosition(MIN_HOOD_POSITION);
     }
 
     public void shoot() {
@@ -109,13 +120,13 @@ public class ShootingMechanism {
 
     private void executeShoot() {
         shooterON();
-        hood.setPosition(ShooterCalculator.calculateAngle(limelight.getDistance()));
-                if (shooterEncoder.getVelocity() < FLY_WHEEL_SPEED_MIN ) {
-                    ballFeederON();
-                } else {
-                    ballFeederOFF();
-                }
-        // }
+        hoodPositioning();
+        if (shooterEncoder.getVelocity() < FLY_WHEEL_SPEED_MIN ) {
+            ballFeederON();
+        } else {
+            ballFeederOFF();
+        }
+      
     }   
 
     private void ballFeederON() {
@@ -137,11 +148,11 @@ public class ShootingMechanism {
         shooter.set(0);
     }
 
-    public double shooterVelocity(){
+    public double shooterVelocity() {
       return shooterEncoder.getVelocity();
     }
     
-    public double shooterSetpoint(){
+    public double shooterSetpoint() {
         return ShooterCalculator.calculateRPM(limelight.getDistance());
     }
 }

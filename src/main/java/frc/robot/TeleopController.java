@@ -40,6 +40,7 @@ public class TeleopController {
     
         operatorController.bindButton(LogitechOperatorController.TRIGGER, this::limelightShooting);
         operatorController.bindButtonRelease(LogitechOperatorController.TRIGGER, () -> {isHumanControlled = true; shootingMech.off();});
+        // operatorController.bindButtonToggle(LogitechOperatorController.TRIGGER, shootingMech.hoodPositioning(), shootingMech.);
         operatorController.bindButtonToggle(LogitechOperatorController.THUMB_BUTTON, 
                  intakeMech::indexer, intakeMech::off); 
         operatorController.bindButtonPress(LogitechOperatorController.BOTTOM_LEFT_BASE_BUTTON, intakeMech::off);
