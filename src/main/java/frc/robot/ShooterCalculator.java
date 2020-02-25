@@ -25,7 +25,7 @@ public final class ShooterCalculator {
         if (!initialized) {
             init();
         }
-        int roundDistance = (int) distance;
+        int roundDistance = roundDis(distance);
         Double tableVal = powerTable.get(roundDistance);
         return (tableVal != null ? tableVal.doubleValue() : 0);
     }
@@ -34,9 +34,15 @@ public final class ShooterCalculator {
         if (!initialized) {
             init();
         }
-        int roundDistance = (int) distance;
+        int roundDistance = roundDis(distance);
         Double tableVal = angleTable.get(roundDistance);
         return (tableVal != null ? tableVal.doubleValue() : 0);
+    }
+
+    private static int roundDis(double in) {
+        int out = (int)in;
+        out = (out / 12) * 12;
+        return out;
     }
 
     public static void init() {
