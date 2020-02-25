@@ -12,10 +12,10 @@ import edu.wpi.first.wpilibj.Filesystem;
 
 public final class ShooterCalculator {
 
-    static boolean initialized = false;
+    private static boolean initialized = false;
 
-    static Map<Integer, Double> powerTable = new HashMap<>();
-    static Map<Integer, Double> angleTable = new HashMap<>();
+    private static Map<Integer, Double> powerTable = new HashMap<>();
+    private static Map<Integer, Double> angleTable = new HashMap<>();
 
     private ShooterCalculator() {
         throw new UnsupportedOperationException("ShooterCalculator is a utility class! If you're seeing this, the code is in what I thought was an unreachable state. I could give you advice for what to do. But honestly, why should you trust me? I clearly screwed this up. I'm writing a message that should never appear, yet I know it will probably appear someday. On a deep level, I know I'm not up to this task. I'm so sorry.");
@@ -48,7 +48,8 @@ public final class ShooterCalculator {
     public static void init() {
         if (!initialized) {
 
-            File dataFile = new File (Filesystem.getDeployDirectory().getPath().concat("ShooterTable.csv"));
+            File dataFile = new File(Filesystem.getDeployDirectory().getPath().concat("/ShooterTable.csv"));
+            System.out.println("---------------" + dataFile.toString());
             powerTable.clear();
             angleTable.clear();
 
