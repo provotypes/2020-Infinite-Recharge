@@ -45,7 +45,7 @@ public class ShootingMechanism {
     private final double SHOOTER_DEFAULT_SPEED = 0.7;
     private final double DRIVE_TRAIN_THRESHOLD = 0.5;
     private final double MAX_HOOD_POSITION = 0.8;
-    private final double MIN_HOOD_POSITION = 0.1;
+    private final double MIN_HOOD_POSITION = 0.2;
 
 
     private ShootingMechanism() {
