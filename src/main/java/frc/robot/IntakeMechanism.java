@@ -9,13 +9,13 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 public class IntakeMechanism {
 
-    private final double INDEXER_PERCENT = 0.5;
+    private final double INDEXER_PERCENT = 0.9;
     private final double INDEXER_REVERSE = 0.5;
-    private final double OUTER_INTAKE_PERCENT = 0.5;
+    private final double OUTER_INTAKE_PERCENT = 0.8;
     private final double INNER_INTAKE_PERCENT = 0.5;
-    private final double OUTER_INTAKE_REVERSE = 1; 
-    private final double INNER_INTAKE_REVERSE = 1;
-    private final double OUTER_INTAKE_REVERSE_LOW = 0.1;
+    private final double OUTER_INTAKE_REVERSE = -6.0;
+    private final double INNER_INTAKE_REVERSE = -6.0;
+    private final double OUTER_INTAKE_REVERSE_LOW = 0.0;
     private static IntakeMechanism instance;
     //Port numbers are inaccurate
     private static TalonSRX outerIntakeWheels = new TalonSRX(4);
@@ -114,14 +114,14 @@ public class IntakeMechanism {
 
     // This will be constantly running when intake is off
     private void outerIntakeWheelsReverseLow() {
-        outerIntakeWheels.set(ControlMode.PercentOutput, OUTER_INTAKE_REVERSE_LOW);
+        outerIntakeWheels.set(ControlMode.PercentOutput, -OUTER_INTAKE_REVERSE_LOW);
     }
 
     // This along with inner intake wheels reverse will have a dedicated button in case we jam
     private void outerIntakeWheelsReverse() {
         outerIntakeWheels.set(ControlMode.PercentOutput, OUTER_INTAKE_REVERSE);
     }
-   
+
     private void innerIntakeWheelsON() {
         innerIntakeWheels.set(ControlMode.PercentOutput, INNER_INTAKE_PERCENT);
     }

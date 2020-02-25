@@ -30,6 +30,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     colorSensor.matchColors();
     teleopController.TeleopInit();
+    drivetrain.setCoast();
   }
 
   
@@ -38,7 +39,7 @@ public class Robot extends TimedRobot {
     colorSensor.ourColor();
     drivetrain.putSmartDashInfo();
     SmartDashboard.putNumber("Limelight Distance", limelight.getDistance());
-    limelight.optimizedDistance();
+    // limelight.optimizedDistance();
 
     if (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue) {
       ledColor.set(false);
@@ -49,12 +50,17 @@ public class Robot extends TimedRobot {
 
   }
 
+  @Override
+  public void disabledInit() {
+    drivetrain.setCoast();
+  }
   
   @Override
   public void autonomousInit() {
    // autoRoutine = autoChooser.getAutoChooser;
       autoRoutine.start();
       isTaskRunning = true;
+      drivetrain.setBrake();
   }
 
 	@Override
@@ -69,6 +75,11 @@ public class Robot extends TimedRobot {
           }
      }
   }
+
+    @Override
+    public void teleopInit() {
+      drivetrain.setBrake();
+    }
 
 	@Override
 	public void teleopPeriodic() {

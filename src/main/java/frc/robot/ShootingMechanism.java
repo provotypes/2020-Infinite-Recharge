@@ -39,7 +39,7 @@ public class ShootingMechanism {
     private final double FEED_FORWARD = 0.000015;
     
     private double hoodDistance;
-    private final double FLY_WHEEL_SPEED = ShooterCalculator.calculateRPM(limelight.getDistance());
+    private final double FLY_WHEEL_SPEED = -1000;
     private double FLY_WHEEL_SPEED_MIN = FLY_WHEEL_SPEED + 20;
     private final double BALL_FEEDER_SPEED = 0.3;
     private final double SHOOTER_DEFAULT_SPEED = 0.7;
@@ -140,7 +140,7 @@ public class ShootingMechanism {
     private void shooterON() {
         double flyWheelSpeed = ShooterCalculator.calculateRPM(limelight.getDistance());
         // pidController.setReference(FLY_WHEEL_SPEED, ControlType.kVelocity);
-        shooter.set(-0.9);
+        shooter.set(-0.4);
     }
     
 

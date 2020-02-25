@@ -5,6 +5,7 @@ import com.analog.adis16470.frc.ADIS16470_IMU.ADIS16470CalibrationTime;
 import com.analog.adis16470.frc.ADIS16470_IMU.IMUAxis;
 import com.revrobotics.*;
 import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -39,7 +40,18 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
     private static double kP = 0.01;
 
     private Drivetrain() {
-        super(leftGroup, rightGroup);
+		super(leftGroup, rightGroup);
+
+		setCoast();
+
+		rearLeft.setOpenLoopRampRate(0.6);
+		frontLeft.setOpenLoopRampRate(0.6);
+		rearRight.setOpenLoopRampRate(0.6);
+		frontRight.setOpenLoopRampRate(0.6);
+		
+		leftGroup.setInverted(false);
+		rightGroup.setInverted(false);
+
         frontLeftEncoder = frontLeft.getEncoder();
         rearLeftEncoder = rearLeft.getEncoder();
         frontRightEncoder = frontRight.getEncoder();
@@ -89,11 +101,20 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
     }
 
 	public void setBrake() {
-        
+        rearLeft.setIdleMode(IdleMode.kBrake);
+		frontLeft.setIdleMode(IdleMode.kCoast);
+		rearRight.setIdleMode(IdleMode.kBrake);
+		frontRight.setIdleMode(IdleMode.kCoast);
     }
 
  
-	public void setCoast() {}
+	public void setCoast() {
+		rearLeft.setIdleMode(IdleMode.kCoast);
+		frontLeft.setIdleMode(IdleMode.kCoast);
+		rearRight.setIdleMode(IdleMode.kCoast);
+		frontRight.setIdleMode(IdleMode.kCoast);
+
+	}
 
  
     public double getLeftEncoderDistance() {
