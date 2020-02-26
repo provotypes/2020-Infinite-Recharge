@@ -10,7 +10,7 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 public class IntakeMechanism {
 
     private final double INDEXER_PERCENT = 0.9;
-    private final double INDEXER_REVERSE = 0.5;
+    private final double INDEXER_REVERSE = -0.5;
     private final double OUTER_INTAKE_PERCENT = 0.8;
     private final double INNER_INTAKE_PERCENT = 0.5;
     private final double OUTER_INTAKE_REVERSE = -6.0;
