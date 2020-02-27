@@ -91,12 +91,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
-    // drivetrain.calibrateGyro();
+    shooter.off();
   }
 
 	@Override
 	public void testPeriodic() {  
-
+    shooter.update();
   }
   
 }

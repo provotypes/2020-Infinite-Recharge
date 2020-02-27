@@ -135,6 +135,33 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
         arcadeDrive(speed, turn, true);
     }
 
+    /** 
+     * cuvature drive with auto quick turn at slow speeds
+     */
+    public void specialCurveDrive(double speed, double turn) {
+        double outSpeed = speed;
+        double outTurn = turn;
+        boolean quickTurn = false;
+
+        double gyroRate = IMU.getRate();
+        if ((inRange(outTurn, -0.1, 0.1)) && (!inRange(gyroRate, -1, 1))) {
+            outTurn += (gyroRate * 0.005);
+            SmartDashboard.putBoolean("turnfix", true);
+        }
+        else {
+            SmartDashboard.putBoolean("turnfix", false);
+        }
+
+        if (outSpeed < 0.1 && outSpeed > -0.1) { // cuvature drive with auto quick turn at slow speeds
+            quickTurn =  true;
+        }
+        else {
+            quickTurn = false;
+        }
+
+        super.curvatureDrive(outSpeed, outTurn, quickTurn);
+    }
+
     public void drvietrainAngleLineup() {
         kP = SmartDashboard.getNumber("drivetrain_kP", 0);
         double outputValue = 0.0;
@@ -160,6 +187,22 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
         SmartDashboard.putNumber("wraper X", IMU.getXAngle());
         SmartDashboard.putNumber("wraper Y", IMU.getYAngle());
         SmartDashboard.putNumber("wraper Z", IMU.getZAngle());
+    }
+
+    /**
+     * 
+     * @param input input value
+     * @param low lower bound
+     * @param high upper bound
+     * @return if input is between low and high (inclusive)
+     */
+    private boolean inRange(double input, double low, double high) {
+        if ((input >= low) && (input <= high)) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
 }

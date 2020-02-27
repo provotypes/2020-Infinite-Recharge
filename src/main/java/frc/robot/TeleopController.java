@@ -71,12 +71,7 @@ public class TeleopController {
             double outRotation = rotation * rotateMultiplier;
             // outRotation = Math.pow(outRotation, 3);
 
-            if (speed < 0.1 && speed > -0.1) { // cuvature drive with auto quick turn at slow speeds
-                drivetrain.curvatureDrive(outSpeed, -outRotation, true);
-            }
-            else {
-                drivetrain.curvatureDrive(outSpeed, -outRotation, false);
-            }
+            drivetrain.specialCurveDrive(outSpeed, -outRotation);
         }
     }
 
