@@ -54,5 +54,4 @@ public class AutoRoutine implements TaskInterface {
 		isFinished = true;
 	}
 
-
 }

@@ -42,7 +42,7 @@ public class ShootingMechanism {
     private final double FLY_WHEEL_SPEED = -1000;
     private double FLY_WHEEL_SPEED_MIN = FLY_WHEEL_SPEED + 20;
     private final double BALL_FEEDER_SPEED = 0.3;
-    private final double SHOOTER_DEFAULT_SPEED = 0.7;
+    private final double SHOOTER_DEFAULT_SPEED = -0.4;
     private final double DRIVE_TRAIN_THRESHOLD = 0.5;
     private final double MAX_HOOD_POSITION = 0.8;
     private final double MIN_HOOD_POSITION = 0.2;
@@ -85,7 +85,7 @@ public class ShootingMechanism {
 
     public void update() {
         shootingModes.get(curMode).run();
-        SmartDashboard.putNumber("shooter v", shooterEncoder.getVelocity());
+        SmartDashboard.putNumber("Shooter Velocity", shooterEncoder.getVelocity());
         SmartDashboard.putNumber("Shooter pow", shooter.get());
     }
 
@@ -101,8 +101,7 @@ public class ShootingMechanism {
                 hood.setPosition(hoodPosition);
             }
         }
-    }
-
+    } 
 
     public void off() {
         this.curMode = ShooterMechanismModes.off;
@@ -140,7 +139,7 @@ public class ShootingMechanism {
     private void shooterON() {
         double flyWheelSpeed = ShooterCalculator.calculateRPM(limelight.getDistance());
         // pidController.setReference(FLY_WHEEL_SPEED, ControlType.kVelocity);
-        shooter.set(-0.4);
+        shooter.set(SHOOTER_DEFAULT_SPEED);
     }
     
 

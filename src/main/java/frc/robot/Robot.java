@@ -10,13 +10,10 @@ import edu.wpi.first.wpilibj.Servo;
 public class Robot extends TimedRobot {
 
   private ShootingMechanism shooter = ShootingMechanism.getInstance();
-  private ClimbingMechanism climber = ClimbingMechanism.getInstance();
-  private ControlPanelMechanism controlPanelSpinner = ControlPanelMechanism.getInstance();
   private Drivetrain drivetrain = Drivetrain.getInstance();
   private IntakeMechanism intake = IntakeMechanism.getInstance();
   private TeleopController teleopController = TeleopController.getInstance();
-  private LogitechDriverController driverController = new LogitechDriverController(0);
-  private LogitechOperatorController operatorController = new LogitechOperatorController(1);
+ 
 
   private TaskInterface autoRoutine;
   private boolean isTaskRunning = false;
