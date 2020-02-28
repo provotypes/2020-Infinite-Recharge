@@ -12,10 +12,10 @@ import edu.wpi.first.wpilibj.Filesystem;
 
 public final class ShooterCalculator {
 
-    static boolean initialized = false;
+    private static boolean initialized = false;
 
-    static Map<Integer, Double> powerTable = new HashMap<>();
-    static Map<Integer, Double> angleTable = new HashMap<>();
+    private static Map<Integer, Double> powerTable = new HashMap<>();
+    private static Map<Integer, Double> angleTable = new HashMap<>();
 
     private ShooterCalculator() {
         throw new UnsupportedOperationException(
@@ -49,7 +49,8 @@ public final class ShooterCalculator {
     public static void init() {
         if (!initialized) {
 
-            File dataFile = new File(Filesystem.getDeployDirectory().getPath().concat("ShooterTable.csv"));
+            File dataFile = new File(Filesystem.getDeployDirectory().getPath().concat("/ShooterTable.csv"));
+            System.out.println("---------------" + dataFile.toString());
             powerTable.clear();
             angleTable.clear();
 
