@@ -53,7 +53,7 @@ public class TeleopController {
                  intakeMech::reverse, intakeMech::intakeIdle);
         operatorController.bindButtonToggle(LogitechOperatorController.MIDDLE_LEFT_BASE_BUTTON, 
                  intakeMech::reverse, intakeMech::intakeIdle);
-        driverController.bindAxes(driverController.LEFT_Y_AXIS, driverController.RIGHT_X_AXIS, this::arcade);
+        driverController.bindAxes(LogitechDriverController.LEFT_Y_AXIS, LogitechDriverController.RIGHT_X_AXIS, this::arcade);
     }
 
     public void update(){

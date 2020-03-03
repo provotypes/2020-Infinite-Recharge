@@ -84,7 +84,7 @@ public class ShootingMechanism {
 
     public void update() {
         shootingModes.get(curMode).run();
-        SmartDashboard.putNumber("shooter v", shooterEncoder.getVelocity());
+        SmartDashboard.putNumber("Shooter Velocity", shooterEncoder.getVelocity());
         SmartDashboard.putNumber("Shooter pow", shooter.get());
     }
 
@@ -100,8 +100,7 @@ public class ShootingMechanism {
                 hood.setPosition(hoodPosition);
             }
         }
-    }
-
+    } 
 
     public void off() {
         this.curMode = ShooterMechanismModes.off;

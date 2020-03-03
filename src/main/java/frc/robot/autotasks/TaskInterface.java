@@ -23,8 +23,6 @@ public interface TaskInterface {
 	 */
 	public boolean isFinished();
 
-	//FIXME would be cool to make this link work:
-
 	/**
 	 * Should be run once after {@link isFinished()} returns true
 	 */
