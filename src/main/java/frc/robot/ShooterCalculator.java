@@ -40,10 +40,23 @@ public final class ShooterCalculator {
         return (tableVal != null ? tableVal.doubleValue() : 0);
     }
 
-    public static int roundDis(double in) {
+    private static int roundDis(double in) {
         int out = (int)in;
         out = (out / 12) * 12;
         return out;
+    }
+
+    /**
+     * sets a value in the lookup table, does not persist (write down everything)
+     * @param dis   distance for the setpoint in inches
+     * @param rpm   motor speed in RPMs
+     * @param angle hood angle from 0 to 1 (0 shoots high into the air, 1 shoots long)
+     */
+    public static void setValues(int dis, double rpm, double angle) {
+        int lookupDis = roundDis(dis);
+
+        powerTable.replace(lookupDis, rpm);
+        angleTable.replace(lookupDis, angle);
     }
 
     public static void init() {
