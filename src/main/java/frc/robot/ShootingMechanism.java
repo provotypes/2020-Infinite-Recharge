@@ -28,7 +28,7 @@ public class ShootingMechanism {
     private CANSparkMax shooter = new CANSparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless);
     // private CANSparkMax shooter_b = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
     //These motor controllers have enocders in them
-    private Servo hood = new Servo(0);
+    public Servo hood = new Servo(0);
     private CANEncoder shooterEncoder = shooter.getEncoder();
     private CANPIDController pidController;
    
@@ -39,8 +39,7 @@ public class ShootingMechanism {
     private final double FEED_FORWARD = 0.000015;
     
     private double hoodDistance;
-    private final double FLY_WHEEL_SPEED = -1000;
-    private double FLY_WHEEL_SPEED_MIN = FLY_WHEEL_SPEED + 20;
+    private final double FLY_WHEEL_SPEED_THRESH = 100;
     private final double BALL_FEEDER_SPEED = 0.5;
     private final double SHOOTER_DEFAULT_SPEED = 0.7;
     private final double DRIVE_TRAIN_THRESHOLD = 0.5;
@@ -108,10 +107,10 @@ public class ShootingMechanism {
         this.curMode = ShooterMechanismModes.off;
     }
 
-    private void executeOff() {
+    public void executeOff() {
         shooterOFF();
         ballFeederOFF();
-        hood.setPosition(MIN_HOOD_POSITION);
+        hood.setPosition(0);
     }
 
     public void shoot() {
@@ -121,7 +120,7 @@ public class ShootingMechanism {
     private void executeShoot() {
         shooterON();
         hoodPositioning();
-        if (shooterEncoder.getVelocity() < FLY_WHEEL_SPEED_MIN ) {
+        if (shooterEncoder.getVelocity() < (-ShooterCalculator.calculateRPM(limelight.getDistance()) + FLY_WHEEL_SPEED_THRESH)) {
             ballFeederON();
         } else {
             ballFeederOFF();
@@ -138,9 +137,9 @@ public class ShootingMechanism {
     }
 
     private void shooterON() {
-        double flyWheelSpeed = ShooterCalculator.calculateRPM(limelight.getDistance());
-        // pidController.setReference(FLY_WHEEL_SPEED, ControlType.kVelocity);
-        shooter.set(-0.4);
+        double flyWheelSpeed = -ShooterCalculator.calculateRPM(limelight.getDistance());
+        pidController.setReference(flyWheelSpeed, ControlType.kVelocity);
+        // shooter.set(-0.4);
     }
     
 
