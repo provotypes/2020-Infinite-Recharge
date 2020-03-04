@@ -1,13 +1,23 @@
 package frc.robot;
 
-import java.util.Map;
 import static java.util.Map.entry;
+
+import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.Timer;
+
 public class IntakeMechanism {
 
+    private static IntakeMechanism instance;
+    private static TalonSRX outerIntakeWheels = new TalonSRX(4);
+	private static TalonSRX innerIntakeWheels = new TalonSRX(1);
+    private static TalonSRX indexer = new TalonSRX(3);
+    // Port number is wrong here
+    private static TalonSRX greenWheels = new TalonSRX(1);
+   
     private final double INDEXER_PERCENT = 0.9;
     private final double INDEXER_REVERSE = -0.5;
     private final double OUTER_INTAKE_PERCENT = 0.8;
@@ -15,13 +25,11 @@ public class IntakeMechanism {
     private final double OUTER_INTAKE_REVERSE = -6.0;
     private final double INNER_INTAKE_REVERSE = -6.0;
     private final double OUTER_INTAKE_REVERSE_LOW = 0.0;
-    private static IntakeMechanism instance;
-    //Port numbers are inaccurate
-    private static TalonSRX outerIntakeWheels = new TalonSRX(4);
-	private static TalonSRX innerIntakeWheels = new TalonSRX(1);
-    private static TalonSRX indexer = new TalonSRX(3);
-   
-    private IntakeMechanism() {}
+    private Timer time = new Timer();
+
+    private IntakeMechanism() {
+        time.start();
+    }
 
     public static IntakeMechanism getInstance() {
         if(instance == null) { 
@@ -31,7 +39,6 @@ public class IntakeMechanism {
     }
     
     enum IntakeMechanismModes {
-        bothIntakesOn,
         indexerAndIntakes,
         indexer,
         reverse,
@@ -50,7 +57,7 @@ public class IntakeMechanism {
     private IntakeMechanismModes mode = IntakeMechanismModes.off;
 
     public void update() {
-	    intakeModes.get(mode).run();
+        intakeModes.get(mode).run();
     }
 
     public void off() {
@@ -77,6 +84,7 @@ public class IntakeMechanism {
         outerIntakeWheelsOFF();
         innerIntakeWheelsOFF();
         indexerOFF();
+        greenWheelsOFF();
     }
 
     private void executeIntakeIdle() {
@@ -89,18 +97,21 @@ public class IntakeMechanism {
         outerIntakeWheelsON();
         innerIntakeWheelsON();
         indexerON();
+        greenWheelsON();
     }
 
     private void executeIndexer() {
         innerIntakeWheelsON();
         outerIntakeWheelsReverseLow();
         indexerON();
+        greenWheelsON();
     }
 
     private void executeReverse() {
         innerIntakeWheelsReverse();
         outerIntakeWheelsReverse();
         indexerReverse();
+        greenWheelsON();
     }
 
     private void outerIntakeWheelsON() {
@@ -131,6 +142,14 @@ public class IntakeMechanism {
 
     private void innerIntakeWheelsReverse() {
         innerIntakeWheels.set(ControlMode.PercentOutput, INNER_INTAKE_REVERSE);
+    }
+
+    private void greenWheelsON() {
+        greenWheels.set(ControlMode.PercentOutput, Math.sin(time.get()));
+    }
+
+    private void greenWheelsOFF() {
+        greenWheels.set(ControlMode.PercentOutput, 0);
     }
 
     private void indexerON() {

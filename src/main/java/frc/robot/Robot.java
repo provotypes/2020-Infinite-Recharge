@@ -44,7 +44,9 @@ public class Robot extends TimedRobot {
     else {
       ledColor.set(true);
     }
-
+    
+    shooter.update();
+    intake.update();
   }
 
   @Override
