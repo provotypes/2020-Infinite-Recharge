@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class LimelightVisionTracking {
 
@@ -15,9 +16,11 @@ public class LimelightVisionTracking {
 
     //fix me
     private final double REL_TARGET_HEIGHT = 98.25-17.75; // this should definitly be changed || the target height - shooter height. 
-    private final double MOUNT_ANGLE = 27; // this should be the mount angle for the limelight + the limelight angle
+    private final double MOUNT_ANGLE = 33.7; // this should be the mount angle for the limelight + the limelight angle
     private final double DISTANCE_THRESHOLD = 200;
-    private LimelightVisionTracking() {}
+    private LimelightVisionTracking() {
+        SmartDashboard.putNumber("limelight angle", MOUNT_ANGLE);
+    }
 
     public static LimelightVisionTracking getInstance() {
         if(instance == null) {
@@ -32,7 +35,7 @@ public class LimelightVisionTracking {
     } 
 
     public double getDistance() {
-        double angleInRadians = ((MOUNT_ANGLE + ty.getDouble(0.0)) * Math.PI) / 180;
+        double angleInRadians = ((SmartDashboard.getNumber("limelight angle", MOUNT_ANGLE) + ty.getDouble(0.0)) * Math.PI) / 180;
         double distance = REL_TARGET_HEIGHT/Math.tan(angleInRadians);
         return distance;
     }

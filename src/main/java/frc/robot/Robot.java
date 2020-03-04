@@ -47,6 +47,11 @@ public class Robot extends TimedRobot {
     
     shooter.update();
     intake.update();
+
+    SmartDashboard.putNumber("shooter calc dis", ShooterCalculator.roundDis(limelight.getDistance()));
+    SmartDashboard.putNumber("shooter calc angle", ShooterCalculator.calculateAngle(limelight.getDistance()));
+    SmartDashboard.putNumber("shooter calc power", ShooterCalculator.calculateRPM(limelight.getDistance()));
+
   }
 
   @Override
@@ -90,12 +95,14 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
-    shooter.off();
+    // shooter.off();
   }
 
 	@Override
 	public void testPeriodic() {  
-    shooter.update();
+    // shooter.update();
+    // shooter.executeOff();
+    shooter.hood.set(0);
   }
   
 }

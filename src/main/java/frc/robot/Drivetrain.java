@@ -11,6 +11,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.trajectory.constraint.TrajectoryConstraint.MinMax;
 import frc.robot.easypath.EasyPathDrivetrain;
 
 public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain {
@@ -33,8 +34,8 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
     private static Drivetrain instance;
     private IMUAngleTracker IMU = new IMUAngleTracker();
     private double xP;
-    private final double MIN_POWER = 0.02;
-    private final double MIN_ANGLE_THRESHOLD = 2;
+    private final double MIN_POWER = 0.05;
+    private final double MIN_ANGLE_THRESHOLD = 0.6;
     LimelightVisionTracking limelight = LimelightVisionTracking.getInstance();
 
     private static double kP = 0.01;
@@ -145,7 +146,7 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
 
         double gyroRate = IMU.getRate();
         if ((inRange(outTurn, -0.1, 0.1)) && (!inRange(gyroRate, -1, 1))) {
-            outTurn += (gyroRate * 0.005);
+            outTurn += (gyroRate * 0.003);
             SmartDashboard.putBoolean("turnfix", true);
         }
         else {
@@ -167,14 +168,20 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
         double outputValue = 0.0;
         double tx = limelight.getHorizontalAngle();
 
-        if (tx > 1.0) {
-            outputValue = (-tx * kP) - MIN_POWER;
-        } else if (tx < 1.0) {
-            outputValue = (-tx * kP) + MIN_POWER;
+        outputValue = -tx * kP;
+
+        if (inRange(outputValue, -MIN_POWER, MIN_POWER)) {
+            outputValue = MIN_POWER * -Math.signum(tx);
+        }
+
+        if ((tx > MIN_ANGLE_THRESHOLD) && (tx < -MIN_ANGLE_THRESHOLD)) {
+            outputValue = 0;
         }
 
         arcadeDrive(0, -outputValue, false);
-        SmartDashboard.putNumber("Limelight HorizontalAngleThing",  limelight.getHorizontalAngle());
+        SmartDashboard.putNumber("Limelight HorizontalAngle",  limelight.getHorizontalAngle());
+
+
     }
 
     public void antiTippingMechanism() {
