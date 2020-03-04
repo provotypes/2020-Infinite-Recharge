@@ -44,9 +44,6 @@ public class Robot extends TimedRobot {
     else {
       ledColor.set(true);
     }
-    
-    shooter.update();
-    intake.update();
 
     SmartDashboard.putNumber("shooter calc dis", ShooterCalculator.roundDis(limelight.getDistance()));
     SmartDashboard.putNumber("shooter calc angle", ShooterCalculator.calculateAngle(limelight.getDistance()));
@@ -78,6 +75,9 @@ public class Robot extends TimedRobot {
             isTaskRunning = false;
           }
      }
+
+     shooter.update();
+    intake.update();
   }
 
     @Override
