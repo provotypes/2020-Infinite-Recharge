@@ -75,6 +75,9 @@ public class Robot extends TimedRobot {
             isTaskRunning = false;
           }
      }
+
+     shooter.update();
+    intake.update();
   }
 
     @Override

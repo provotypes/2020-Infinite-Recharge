@@ -10,7 +10,7 @@ public class IntakeMechanismTask implements TaskInterface {
     
     @Override
     public void start() {
-
+        intake.indexerAndIntakes();
     }
 
     @Override
@@ -20,7 +20,7 @@ public class IntakeMechanismTask implements TaskInterface {
 
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
 
     @Override
