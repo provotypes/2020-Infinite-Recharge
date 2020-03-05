@@ -73,7 +73,7 @@ public class ClimbingMechanism {
     }
 
     private void climberWinchOFF() {
-        climberWinch.set(ControlMode.PercentOutput, );
+        climberWinch.set(ControlMode.PercentOutput, 0);
     }
 
     private void climberElevatorON() {
@@ -81,7 +81,7 @@ public class ClimbingMechanism {
     }
 
     private void climberElevatorOFF() {
-        climberElevator.set(ControlMode.PercentOutput, );
+        climberElevator.set(ControlMode.PercentOutput, 0);
     }
 
 

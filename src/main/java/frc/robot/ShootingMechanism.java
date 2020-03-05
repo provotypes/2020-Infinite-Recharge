@@ -30,8 +30,12 @@ public class ShootingMechanism {
     private CANEncoder shooterEncoder = shooter.getEncoder();
     private CANPIDController pidController;
     private Timer shooterTimer = new Timer();
-    private double lastHoodSet = 0.0;
-   
+    private int lastHoodSet = 5;
+    private double hoodTimeToPos = 0.0;
+
+    // second per (10*percentage)
+    private final double HOOD_SPEED = 3.0d / 4.06;
+
     private final double SHOOTER_KP = 0.0005;
     private final double SHOOTER_KI = 0.000001;
     private final double SHOOTER_KD = 0.0;
@@ -109,6 +113,9 @@ public class ShootingMechanism {
             SmartDashboard.putBoolean("set Shooter Table val", false);
         }
         
+        SmartDashboard.putNumber("shooterTimer", shooterTimer.get());
+        SmartDashboard.putNumber("hood old", lastHoodSet);
+        SmartDashboard.putNumber("hoodTimeToPos", hoodTimeToPos);
         
     }
 
@@ -117,11 +124,18 @@ public class ShootingMechanism {
             hoodDistance = limelight.getDistance();
             double hoodPosition = ShooterCalculator.calculateAngle(hoodDistance);
             if (hoodPosition > MAX_HOOD_POSITION) {
-                hood.setPosition(MAX_HOOD_POSITION);
+                hoodPosition = MAX_HOOD_POSITION;
             } else if (hoodPosition < MIN_HOOD_POSITION) {
-                hood.setPosition(MIN_HOOD_POSITION);
-            } else {
-                hood.setPosition(hoodPosition);
+                hoodPosition = MIN_HOOD_POSITION;
+            }
+            hood.setPosition(hoodPosition);
+
+            int intHoodSet = (int)(hoodPosition * 10);
+            if (intHoodSet != lastHoodSet) {
+                hoodTimeToPos = HOOD_SPEED * Math.abs(intHoodSet - lastHoodSet);
+                shooterTimer.reset();
+                shooterTimer.start();
+                lastHoodSet = intHoodSet;
             }
         }
         else {
@@ -137,6 +151,7 @@ public class ShootingMechanism {
         shooterOFF();
         ballFeederOFF();
         hood.setPosition(IDLE_HOOD_POSITION);
+        lastHoodSet = (int)(IDLE_HOOD_POSITION * 10);
     }
 
     public void shoot() {
@@ -147,10 +162,12 @@ public class ShootingMechanism {
         shooterON();
         hoodPositioning();
         if (shooterEncoder.getVelocity() < (-ShooterCalculator.calculateRPM(limelight.getDistance()) + FLY_WHEEL_SPEED_THRESH)) {
-            ballFeederON();
+            if (shooterTimer.get() > hoodTimeToPos) {
+                ballFeederON();
+            }
         } else {
             ballFeederOFF();
-            shooterTimer.reset();
+            
         }
       
     }   
