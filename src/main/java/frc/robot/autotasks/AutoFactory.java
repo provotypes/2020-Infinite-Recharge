@@ -9,9 +9,9 @@ import frc.robot.easypath.PathUtil;
 public class AutoFactory {
 
     public static List<TaskInterface> DEFAULT_AUTO() {
-		List<TaskInterface> taskList = new ArrayList<TaskInterface>();
+        List<TaskInterface> taskList = new ArrayList<TaskInterface>();
+        taskList.add(new EasyPathTask(new FollowPath(PathUtil.createStraightPath(36), 0.4)));
         taskList.add(new ShootingMechanismTask(3));
-		taskList.add(new EasyPathTask(new FollowPath(PathUtil.createStraightPath(36), -0.4)));
         return taskList;
     }
     

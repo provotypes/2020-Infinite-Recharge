@@ -196,6 +196,6 @@ public class ShootingMechanism {
     }
     
     public double shooterSetpoint() {
-        return ShooterCalculator.calculateRPM(limelight.getDistance());
+        return -ShooterCalculator.calculateRPM(limelight.getDistance());
     }
 }

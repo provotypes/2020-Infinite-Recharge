@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.autotasks.AutoChooser;
+import frc.robot.autotasks.AutoSetup;
 import frc.robot.autotasks.TaskInterface;
 import edu.wpi.first.wpilibj.Servo;
 
@@ -28,6 +30,8 @@ public class Robot extends TimedRobot {
     colorSensor.matchColors();
     teleopController.TeleopInit();
     drivetrain.setCoast();
+
+    AutoSetup.init();
   }
 
   
@@ -58,10 +62,11 @@ public class Robot extends TimedRobot {
   
   @Override
   public void autonomousInit() {
-   // autoRoutine = autoChooser.getAutoChooser;
+      autoRoutine = AutoChooser.getChosenAuto();
       autoRoutine.start();
       isTaskRunning = true;
       drivetrain.setBrake();
+      drivetrain.resetEncodersAndGyro();
   }
 
 	@Override

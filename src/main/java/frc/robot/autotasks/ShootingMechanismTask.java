@@ -1,5 +1,6 @@
 package frc.robot.autotasks;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Drivetrain;
 import frc.robot.IntakeMechanism;
 import frc.robot.ShootingMechanism;
@@ -13,7 +14,7 @@ public class ShootingMechanismTask implements TaskInterface {
 	private int numberOfBalls;
 	private double flywheelVelocity;
 	private int ballsShot;
-	private final double SHOOTER_OFFSET = 50;
+	private final double SHOOTER_OFFSET = 20;
 	private boolean shooterAtTarget;
 
 	public ShootingMechanismTask(int numberOfBalls) {
@@ -32,14 +33,17 @@ public class ShootingMechanismTask implements TaskInterface {
 		intake.indexer();
 		drivetrain.drvietrainAngleLineup(0.0);
 		
-		if (shooter.shooterVelocity() >= (shooter.shooterSetpoint() - SHOOTER_OFFSET)) {
+		if (shooter.shooterVelocity() <= (shooter.shooterSetpoint() + SHOOTER_OFFSET)) {
 			shooterAtTarget = true;
 		} else {
 			if (shooterAtTarget == true){
 				ballsShot++;
+				shooterAtTarget = false;
 			}
-			shooterAtTarget = false;
+			
 		}
+		SmartDashboard.putNumber("Balls shot", ballsShot);
+		SmartDashboard.putBoolean("ShooterAtTarget", shooterAtTarget);
 	}
 
 	@Override

@@ -16,15 +16,15 @@ public class IntakeMechanism {
 	private static TalonSRX innerIntakeWheels = new TalonSRX(1);
     private static TalonSRX indexer = new TalonSRX(3);
     // Port number is wrong here
-    private static TalonSRX greenWheels = new TalonSRX(1);
+    // private static TalonSRX greenWheels = new TalonSRX();
    
     private final double INDEXER_PERCENT = 0.9;
     private final double INDEXER_REVERSE = -0.5;
-    private final double OUTER_INTAKE_PERCENT = 0.7;
+    private final double OUTER_INTAKE_PERCENT = 0.8;
     private final double INNER_INTAKE_PERCENT = -0.3;
-    private final double OUTER_INTAKE_REVERSE = -6.0;
+    private final double OUTER_INTAKE_REVERSE = -0.6;
     private final double INNER_INTAKE_REVERSE = 6.0;
-    private final double OUTER_INTAKE_REVERSE_LOW = 0.0;
+    private final double OUTER_INTAKE_REVERSE_LOW = -0.1;
     private Timer time = new Timer();
 
     private IntakeMechanism() {
@@ -91,6 +91,7 @@ public class IntakeMechanism {
         outerIntakeWheelsReverseLow();
         innerIntakeWheelsOFF();
         indexerOFF();
+        greenWheelsOFF();
     }
 
     private void executeIndexerAndIntakes() {
@@ -124,7 +125,7 @@ public class IntakeMechanism {
 
     // This will be constantly running when intake is off
     private void outerIntakeWheelsReverseLow() {
-        outerIntakeWheels.set(ControlMode.PercentOutput, -OUTER_INTAKE_REVERSE_LOW);
+        outerIntakeWheels.set(ControlMode.PercentOutput, OUTER_INTAKE_REVERSE_LOW);
     }
 
     // This along with inner intake wheels reverse will have a dedicated button in case we jam
@@ -145,11 +146,11 @@ public class IntakeMechanism {
     }
 
     private void greenWheelsON() {
-        greenWheels.set(ControlMode.PercentOutput, Math.sin(time.get()));
+        // greenWheels.set(ControlMode.PercentOutput, Math.sin(time.get()));
     }
 
     private void greenWheelsOFF() {
-        greenWheels.set(ControlMode.PercentOutput, 0);
+        // greenWheels.set(ControlMode.PercentOutput, 0);
     }
 
     private void indexerON() {

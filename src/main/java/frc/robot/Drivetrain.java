@@ -16,7 +16,8 @@ import frc.robot.easypath.EasyPathDrivetrain;
 
 public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain {
    
-    public static final double DISTANCE_PER_ROTATION = 1.0d/8.45d * 6.0d * Math.PI; // inches //Find Specific 2020 # later
+    public static final double DISTANCE_PER_ROTATION = 1.0d/8.0d * 5.94d * Math.PI; // inches //Find Specific 2020 # later
+    // public static final double DISTANCE_PER_ROTATION = 1;
 
     private static CANEncoder frontLeftEncoder;
     private static CANEncoder rearLeftEncoder;
@@ -34,7 +35,7 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
     private static Drivetrain instance;
     private IMUAngleTracker IMU = new IMUAngleTracker();
     private double xP;
-    private final double MIN_POWER = 0.07;
+    private final double MIN_POWER = 0.06;
     private final double MIN_ANGLE_THRESHOLD = 0.6;
     LimelightVisionTracking limelight = LimelightVisionTracking.getInstance();
 
@@ -123,7 +124,7 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
 	}
 
 	public double getRightEncoderDistance() {
-		return (((frontRightEncoder.getPosition() + rearRightEncoder.getPosition()) / 2.0d));
+		return -(((frontRightEncoder.getPosition() + rearRightEncoder.getPosition()) / 2.0d));
 	}
 
 	public void calibrateGyro() {
@@ -191,6 +192,9 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
 
     public void putSmartDashInfo() {
         SmartDashboard.putNumber("ADIS default angle (Z)", IMU.getAngle());
+        SmartDashboard.putNumber("Drivetrain avg", getInchesTraveled());
+        SmartDashboard.putNumber("Drivetrain left", getLeftEncoderDistance());
+        SmartDashboard.putNumber("Drivetrain right", getRightEncoderDistance());
         // SmartDashboard.putNumber("wraper X", IMU.getXAngle());
         // SmartDashboard.putNumber("wraper Y", IMU.getYAngle());
         // SmartDashboard.putNumber("wraper Z", IMU.getZAngle());

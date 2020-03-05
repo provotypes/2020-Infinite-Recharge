@@ -15,7 +15,7 @@ public class LimelightVisionTracking {
     private NetworkTableEntry pipeline = table.getEntry("pipeline");
 
     //fix me
-    private final double REL_TARGET_HEIGHT = 98.25-17.5; // this should definitly be changed || the target height - shooter height. 
+    private final double REL_TARGET_HEIGHT = 98.25-16.5; // this should definitly be changed || the target height - shooter height. 
     private final double MOUNT_ANGLE = 32.7; // this should be the mount angle for the limelight + the limelight angle
     private final double DISTANCE_THRESHOLD = 200;
     private LimelightVisionTracking() {
