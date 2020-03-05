@@ -30,7 +30,7 @@ public class ShootingMechanismTask implements TaskInterface {
 	public void execute() {
 		shooter.shoot();
 		intake.indexer();
-		drivetrain.drvietrainAngleLineup();
+		drivetrain.drvietrainAngleLineup(0.0);
 		
 		if (shooter.shooterVelocity() >= (shooter.shooterSetpoint() - SHOOTER_OFFSET)) {
 			shooterAtTarget = true;

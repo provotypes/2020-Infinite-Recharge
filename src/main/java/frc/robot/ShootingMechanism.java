@@ -6,19 +6,17 @@ import static java.util.Map.entry;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 
-import edu.wpi.first.hal.sim.DIOSim;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.ControlType;
-import frc.robot.IntakeMechanism.IntakeMechanismModes;
 
 public class ShootingMechanism {
         
@@ -26,11 +24,13 @@ public class ShootingMechanism {
     private LimelightVisionTracking limelight = LimelightVisionTracking.getInstance();
     private TalonSRX ballFeeder = new TalonSRX(2);
     private CANSparkMax shooter = new CANSparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless);
-    // private CANSparkMax shooter_b = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private CANSparkMax shooter_b = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
     //These motor controllers have enocders in them
     public Servo hood = new Servo(0);
     private CANEncoder shooterEncoder = shooter.getEncoder();
     private CANPIDController pidController;
+    private Timer shooterTimer = new Timer();
+    private double lastHoodSet = 0.0;
    
     private final double SHOOTER_KP = 0.0005;
     private final double SHOOTER_KI = 0.000001;
@@ -39,28 +39,34 @@ public class ShootingMechanism {
     private final double FEED_FORWARD = 0.000015;
     
     private double hoodDistance;
-    private final double FLY_WHEEL_SPEED_THRESH = 100;
-    private final double BALL_FEEDER_SPEED = 0.5;
+    private final double FLY_WHEEL_SPEED_THRESH = 20;
+    private final double BALL_FEEDER_SPEED = 0.6;
     private final double SHOOTER_DEFAULT_SPEED = 0.7;
     private final double DRIVE_TRAIN_THRESHOLD = 0.5;
     private final double MAX_HOOD_POSITION = 0.8;
     private final double MIN_HOOD_POSITION = 0.2;
+    private final double IDLE_HOOD_POSITION = 0.5;
 
 
     private ShootingMechanism() {
 
         ballFeeder.setNeutralMode(NeutralMode.Brake);
 
-        // shooter_b.follow(shooter);
+        shooter_b.follow(shooter, true);
         shooter.setIdleMode(IdleMode.kCoast);
+
         pidController = shooter.getPIDController();
+
+        shooter.setSmartCurrentLimit(50);
+
+        shooterTimer.start();
 
         pidController.setP(SHOOTER_KP);
         pidController.setI(SHOOTER_KI);
         pidController.setD(SHOOTER_KD);
         pidController.setIZone(SHOOTER_I_ZONE);
         pidController.setFF(FEED_FORWARD);
-        pidController.setOutputRange(-1, 1);
+        pidController.setOutputRange(-1, 0);
 
         SmartDashboard.putNumber("set shooter dis", 0);
         SmartDashboard.putNumber("set shooter RPM", 0);
@@ -91,6 +97,7 @@ public class ShootingMechanism {
         shootingModes.get(curMode).run();
         SmartDashboard.putNumber("Shooter Velocity", shooterEncoder.getVelocity());
         SmartDashboard.putNumber("Shooter pow", shooter.get());
+        SmartDashboard.putNumber("shooter current", shooter.getOutputCurrent());
 
         if (SmartDashboard.getBoolean("set Shooter Table val", false)) {
             ShooterCalculator.setValues(
@@ -117,6 +124,9 @@ public class ShootingMechanism {
                 hood.setPosition(hoodPosition);
             }
         }
+        else {
+            hood.setPosition(MIN_HOOD_POSITION);
+        }
     } 
 
     public void off() {
@@ -126,7 +136,7 @@ public class ShootingMechanism {
     public void executeOff() {
         shooterOFF();
         ballFeederOFF();
-        hood.setPosition(0);
+        hood.setPosition(IDLE_HOOD_POSITION);
     }
 
     public void shoot() {
@@ -140,6 +150,7 @@ public class ShootingMechanism {
             ballFeederON();
         } else {
             ballFeederOFF();
+            shooterTimer.reset();
         }
       
     }   

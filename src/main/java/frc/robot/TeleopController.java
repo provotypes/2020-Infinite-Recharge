@@ -62,7 +62,7 @@ public class TeleopController {
     }
 
     private void arcade(double speed, double rotation) {
-        if (isHumanControlled){
+        if (isHumanControlled) {
             double rotateMultiplier = rotateMultiplierSupplier.get();
             double speedMultiplier = speedMultiplierSupplier.get();
             
@@ -75,9 +75,13 @@ public class TeleopController {
         }
     }
 
-    private void limelightShooting(){
+    private void limelightShooting() {
         // isHumanControlled = false;
-        drivetrain.drvietrainAngleLineup();
+
+            double speedMultiplier = speedMultiplierSupplier.get();
+            double outSpeed = 0.3 * driverController.getLeftY();
+
+        drivetrain.drvietrainAngleLineup(outSpeed);
         shootingMech.shoot();
     }
 

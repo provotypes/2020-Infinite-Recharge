@@ -163,7 +163,7 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
         super.curvatureDrive(outSpeed, outTurn, quickTurn);
     }
 
-    public void drvietrainAngleLineup() {
+    public void drvietrainAngleLineup(double xSpeed) {
         kP = SmartDashboard.getNumber("drivetrain_kP", 0);
         double outputValue = 0.0;
         double tx = limelight.getHorizontalAngle();
@@ -178,7 +178,7 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
             outputValue = 0;
         }
 
-        arcadeDrive(0, -outputValue, false);
+        arcadeDrive(xSpeed, -outputValue, false);
         SmartDashboard.putNumber("Limelight HorizontalAngle",  limelight.getHorizontalAngle());
 
 
@@ -191,9 +191,9 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
 
     public void putSmartDashInfo() {
         SmartDashboard.putNumber("ADIS default angle (Z)", IMU.getAngle());
-        SmartDashboard.putNumber("wraper X", IMU.getXAngle());
-        SmartDashboard.putNumber("wraper Y", IMU.getYAngle());
-        SmartDashboard.putNumber("wraper Z", IMU.getZAngle());
+        // SmartDashboard.putNumber("wraper X", IMU.getXAngle());
+        // SmartDashboard.putNumber("wraper Y", IMU.getYAngle());
+        // SmartDashboard.putNumber("wraper Z", IMU.getZAngle());
     }
 
     /**

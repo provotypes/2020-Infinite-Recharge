@@ -33,7 +33,7 @@ public class Robot extends TimedRobot {
   
 	@Override
 	public void robotPeriodic() {
-    colorSensor.ourColor();
+    // colorSensor.ourColor();
     drivetrain.putSmartDashInfo();
     SmartDashboard.putNumber("Limelight Distance", limelight.getDistance());
     // limelight.optimizedDistance();
