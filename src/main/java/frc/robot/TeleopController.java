@@ -41,18 +41,23 @@ public class TeleopController {
         operatorController.bindButton(LogitechOperatorController.TRIGGER, this::limelightShooting);
         operatorController.bindButtonRelease(LogitechOperatorController.TRIGGER, () -> {isHumanControlled = true; shootingMech.off();});
         // operatorController.bindButtonToggle(LogitechOperatorController.TRIGGER, shootingMech.hoodPositioning(), shootingMech.);
+        operatorController.bindButtonToggle(LogitechOperatorController.BOTTOM_RIGHT_BASE_BUTTON, 
+                    shootingMech::slowShoot, shootingMech::off);
+        operatorController.bindButtonToggle(LogitechOperatorController.MIDDLE_RIGHT_BASE_BUTTON,
+                    shootingMech::reverseFeeder, shootingMech::off);
         operatorController.bindButtonToggle(LogitechOperatorController.THUMB_BUTTON, 
                  intakeMech::indexer, intakeMech::off); 
-        operatorController.bindButtonPress(LogitechOperatorController.BOTTOM_LEFT_BASE_BUTTON, intakeMech::off);
+        operatorController.bindButtonToggle(LogitechOperatorController.BOTTOM_LEFT_BASE_BUTTON,
+        intakeMech::reverseIndexer, intakeMech::off);
         operatorController.bindButtonPress(LogitechOperatorController.BOTTOM_RIGHT_BASE_BUTTON, intakeMech::off);
         operatorController.bindButtonToggle(LogitechOperatorController.TOP_LEFT_BASE_BUTTON, 
                  intakeMech::indexerAndIntakes, intakeMech::intakeIdle);  
         operatorController.bindButtonToggle(LogitechOperatorController.TOP_RIGHT_BASE_BUTTON, 
                  intakeMech::indexerAndIntakes, intakeMech::intakeIdle); 
         operatorController.bindButtonToggle(LogitechOperatorController.MIDDLE_LEFT_BASE_BUTTON, 
-                 intakeMech::reverse, intakeMech::intakeIdle);
+                 intakeMech::reverseEverything, intakeMech::intakeIdle);
         operatorController.bindButtonToggle(LogitechOperatorController.MIDDLE_LEFT_BASE_BUTTON, 
-                 intakeMech::reverse, intakeMech::intakeIdle);
+                 intakeMech::reverseEverything, intakeMech::intakeIdle);
         driverController.bindAxes(LogitechDriverController.LEFT_Y_AXIS, LogitechDriverController.RIGHT_X_AXIS, this::arcade);
     }
 

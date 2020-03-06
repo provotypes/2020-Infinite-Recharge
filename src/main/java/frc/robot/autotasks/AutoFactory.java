@@ -10,7 +10,7 @@ public class AutoFactory {
 
     public static List<TaskInterface> DEFAULT_AUTO() {
         List<TaskInterface> taskList = new ArrayList<TaskInterface>();
-        taskList.add(new EasyPathTask(new FollowPath(PathUtil.createStraightPath(36), 0.4)));
+        taskList.add(new EasyPathTask(new FollowPath(PathUtil.createStraightPath(24), 0.4)));
         taskList.add(new ShootingMechanismTask(3));
         return taskList;
     }

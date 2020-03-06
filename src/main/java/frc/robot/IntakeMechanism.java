@@ -18,12 +18,12 @@ public class IntakeMechanism {
     // Port number is wrong here
     // private static TalonSRX greenWheels = new TalonSRX();
    
-    private final double INDEXER_PERCENT = 0.9;
-    private final double INDEXER_REVERSE = -0.5;
-    private final double OUTER_INTAKE_PERCENT = 0.8;
+    private final double INDEXER_PERCENT = 0.6;
+    private final double INDEXER_REVERSE = -0.9;
+    private final double OUTER_INTAKE_PERCENT = 0.95;
     private final double INNER_INTAKE_PERCENT = -0.3;
     private final double OUTER_INTAKE_REVERSE = -0.6;
-    private final double INNER_INTAKE_REVERSE = 6.0;
+    private final double INNER_INTAKE_REVERSE = 0.9;
     private final double OUTER_INTAKE_REVERSE_LOW = -0.1;
     private Timer time = new Timer();
 
@@ -41,7 +41,9 @@ public class IntakeMechanism {
     enum IntakeMechanismModes {
         indexerAndIntakes,
         indexer,
-        reverse,
+        indexerSin,
+        reverseEverything,
+        indexerReverse,
         intakeIdle,
         off
     }
@@ -50,8 +52,10 @@ public class IntakeMechanism {
 			entry(IntakeMechanismModes.off, this::executeOff),
 			entry(IntakeMechanismModes.intakeIdle, this::executeIntakeIdle),
 			entry(IntakeMechanismModes.indexerAndIntakes, this::executeIndexerAndIntakes),
-			entry(IntakeMechanismModes.indexer, this::executeIndexer),
-			entry(IntakeMechanismModes.reverse, this::executeReverse)
+            entry(IntakeMechanismModes.indexer, this::executeIndexer),
+            entry(IntakeMechanismModes.indexerSin, this::executeIndexerSin),
+            entry(IntakeMechanismModes.reverseEverything, this::executeReverse),
+            entry(IntakeMechanismModes.indexerReverse, this::executeIndexReverse)
 	    );
 
     private IntakeMechanismModes mode = IntakeMechanismModes.off;
@@ -76,8 +80,16 @@ public class IntakeMechanism {
         this.mode = IntakeMechanismModes.indexer;
     }
 
-    public void reverse() {
-        this.mode = IntakeMechanismModes.reverse;
+    public void indexerSwitch() {
+        this.mode = IntakeMechanismModes.indexerSin;
+    }
+
+    public void reverseEverything() {
+        this.mode = IntakeMechanismModes.reverseEverything;
+    }
+
+    public void reverseIndexer() {
+        this.mode = IntakeMechanismModes.indexerReverse;
     }
   
     private void executeOff() {  
@@ -107,12 +119,25 @@ public class IntakeMechanism {
         indexerON();
         greenWheelsON();
     }
+    private void executeIndexerSin() {
+        innerIntakeWheelsON();
+        outerIntakeWheelsReverseLow();
+        indexerSIN();
+        greenWheelsON();
+    }
 
     private void executeReverse() {
         innerIntakeWheelsReverse();
         outerIntakeWheelsReverse();
         indexerReverse();
         greenWheelsON();
+    }
+
+    private void executeIndexReverse() {
+        innerIntakeWheelsOFF();
+        outerIntakeWheelsOFF();
+        indexerReverse();
+        greenWheelsOFF();
     }
 
     private void outerIntakeWheelsON() {
@@ -155,6 +180,10 @@ public class IntakeMechanism {
 
     private void indexerON() {
         indexer.set(ControlMode.PercentOutput, INDEXER_PERCENT);
+    }
+
+    private void indexerSIN() {
+        indexer.set(ControlMode.PercentOutput, (Math.sin(3.0 * time.get()) * 0.5d) + 0.3);
     }
 
     private void indexerOFF() {

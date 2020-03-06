@@ -7,6 +7,12 @@ public class AutoChooser {
 
 	public static AutoRoutine getChosenAuto() {
 		String autoSelected = AutoSetup.getAutoChooser().getSelected();
+
+		if(autoSelected == null) {
+			System.out.println("Auto selected null!!");
+			return new AutoRoutine(AutoFactory.DEFAULT_AUTO());
+		}
+
 		System.out.println("Auto selected" + autoSelected);
 		AutoRoutine chosenRoutine;
 		

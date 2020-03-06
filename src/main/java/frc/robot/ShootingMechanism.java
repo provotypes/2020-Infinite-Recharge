@@ -87,6 +87,8 @@ public class ShootingMechanism {
 
     enum ShooterMechanismModes {
         shoot,
+        slowShoot,
+        feederReverse,
         off; // upon release in teleop
     }
 
@@ -94,7 +96,9 @@ public class ShootingMechanism {
     
     final Map<ShooterMechanismModes, Runnable> shootingModes = Map.ofEntries(
                 entry(ShooterMechanismModes.off, this::executeOff),
-                entry(ShooterMechanismModes.shoot, this::executeShoot)
+                entry(ShooterMechanismModes.shoot, this::executeShoot),
+                entry(ShooterMechanismModes.slowShoot, this::executeSlowShoot),
+                entry(ShooterMechanismModes.feederReverse, this::executeFeedeReverse)
     );
 
     public void update() {
@@ -158,6 +162,14 @@ public class ShootingMechanism {
         this.curMode = ShooterMechanismModes.shoot;
     }
 
+    public void slowShoot() {
+        this.curMode = ShooterMechanismModes.slowShoot;
+    }
+
+    public void reverseFeeder() {
+        this.curMode = ShooterMechanismModes.feederReverse;
+    }
+
     private void executeShoot() {
         shooterON();
         hoodPositioning();
@@ -169,8 +181,17 @@ public class ShootingMechanism {
             ballFeederOFF();
             
         }
-      
-    }   
+    }
+
+    private void executeSlowShoot() {
+        shooterSlow();
+        ballFeederON();
+    }
+
+    private void executeFeedeReverse() {
+        feederReverse();
+        shooterOFF();
+    }
 
     private void ballFeederON() {
         ballFeeder.set(ControlMode.PercentOutput, -BALL_FEEDER_SPEED);
@@ -180,11 +201,22 @@ public class ShootingMechanism {
         ballFeeder.set(ControlMode.PercentOutput, 0);
     }
 
+    private void feederReverse() {
+        ballFeeder.set(ControlMode.PercentOutput, BALL_FEEDER_SPEED);
+
+    }
+
     private void shooterON() {
         double flyWheelSpeed = -ShooterCalculator.calculateRPM(limelight.getDistance());
         pidController.setReference(flyWheelSpeed, ControlType.kVelocity);
         // shooter.set(-0.4);
     }
+
+    private void shooterSlow() {
+        shooter.set(-0.15);
+    }
+
+    
     
 
     private void shooterOFF() {
