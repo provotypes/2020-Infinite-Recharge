@@ -34,7 +34,7 @@ public class ShootingMechanism {
     private double hoodTimeToPos = 0.0;
 
     // second per (10*percentage)
-    private final double HOOD_SPEED = 3.0d / 4.06;
+    private final double HOOD_SPEED = 3.5d / 4.06;
 
     private final double SHOOTER_KP = 0.0005;
     private final double SHOOTER_KI = 0.000001;
@@ -61,7 +61,8 @@ public class ShootingMechanism {
 
         pidController = shooter.getPIDController();
 
-        shooter.setSmartCurrentLimit(50);
+        shooter.setSmartCurrentLimit(45);
+        shooter_b.setSmartCurrentLimit(45);
 
         shooterTimer.start();
 
@@ -87,6 +88,7 @@ public class ShootingMechanism {
 
     enum ShooterMechanismModes {
         shoot,
+        forceShoot,
         slowShoot,
         feederReverse,
         off; // upon release in teleop
@@ -97,6 +99,7 @@ public class ShootingMechanism {
     final Map<ShooterMechanismModes, Runnable> shootingModes = Map.ofEntries(
                 entry(ShooterMechanismModes.off, this::executeOff),
                 entry(ShooterMechanismModes.shoot, this::executeShoot),
+                entry(ShooterMechanismModes.forceShoot, this::executeForceShoot),
                 entry(ShooterMechanismModes.slowShoot, this::executeSlowShoot),
                 entry(ShooterMechanismModes.feederReverse, this::executeFeedeReverse)
     );
@@ -137,6 +140,14 @@ public class ShootingMechanism {
             int intHoodSet = (int)(hoodPosition * 10);
             if (intHoodSet != lastHoodSet) {
                 hoodTimeToPos = HOOD_SPEED * Math.abs(intHoodSet - lastHoodSet);
+
+                // if (shooterTimer.get() > hoodTimeToPos) {
+                //     hoodTimeToPos = HOOD_SPEED * Math.abs(intHoodSet - lastHoodSet);
+                // }
+                // else {
+                //     hoodTimeToPos = (HOOD_SPEED * Math.abs(intHoodSet - lastHoodSet)) - (hoodTimeToPos - shooterTimer.get());
+                // }
+                
                 shooterTimer.reset();
                 shooterTimer.start();
                 lastHoodSet = intHoodSet;
@@ -162,6 +173,10 @@ public class ShootingMechanism {
         this.curMode = ShooterMechanismModes.shoot;
     }
 
+    public void forceShoot() {
+        this.curMode = ShooterMechanismModes.forceShoot;
+    }
+
     public void slowShoot() {
         this.curMode = ShooterMechanismModes.slowShoot;
     }
@@ -181,6 +196,12 @@ public class ShootingMechanism {
             ballFeederOFF();
             
         }
+    }
+
+    private void executeForceShoot() {
+        shooterON();
+        hoodPositioning();
+        ballFeederON();
     }
 
     private void executeSlowShoot() {
@@ -215,9 +236,6 @@ public class ShootingMechanism {
     private void shooterSlow() {
         shooter.set(-0.15);
     }
-
-    
-    
 
     private void shooterOFF() {
         shooter.set(0);

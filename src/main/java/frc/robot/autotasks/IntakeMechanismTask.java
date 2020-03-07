@@ -5,7 +5,6 @@ import frc.robot.IntakeMechanism;
 
 public class IntakeMechanismTask implements TaskInterface {
     
-    private Drivetrain drivetrain = Drivetrain.getInstance();
 	private IntakeMechanism intake = IntakeMechanism.getInstance();
     
     @Override
@@ -25,7 +24,7 @@ public class IntakeMechanismTask implements TaskInterface {
 
     @Override
     public void end() {
-        intake.off();
+        // intake.off();
     }
 
 

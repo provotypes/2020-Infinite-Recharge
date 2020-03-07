@@ -24,7 +24,7 @@ public class IntakeMechanism {
     private final double INNER_INTAKE_PERCENT = -0.3;
     private final double OUTER_INTAKE_REVERSE = -0.6;
     private final double INNER_INTAKE_REVERSE = 0.9;
-    private final double OUTER_INTAKE_REVERSE_LOW = -0.1;
+    private final double OUTER_INTAKE_REVERSE_LOW = -0.3;
     private Timer time = new Timer();
 
     private IntakeMechanism() {

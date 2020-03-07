@@ -2,12 +2,12 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autotasks.AutoChooser;
 import frc.robot.autotasks.AutoSetup;
 import frc.robot.autotasks.TaskInterface;
-import edu.wpi.first.wpilibj.Servo;
 
 public class Robot extends TimedRobot {
 
@@ -21,6 +21,10 @@ public class Robot extends TimedRobot {
   private boolean isTaskRunning = false;
   private LimelightVisionTracking limelight = LimelightVisionTracking.getInstance();
   private static ColorSensor colorSensor = ColorSensor.getInstance();
+
+  private PowerDistributionPanel pdp = new PowerDistributionPanel();
+
+
 
   //leds
   private DigitalOutput ledColor = new DigitalOutput(0);
@@ -53,6 +57,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("shooter calc angle", ShooterCalculator.calculateAngle(limelight.getDistance()));
     SmartDashboard.putNumber("shooter calc power", ShooterCalculator.calculateRPM(limelight.getDistance()));
 
+    SmartDashboard.putNumber("total current", pdp.getTotalCurrent());
   }
 
   @Override
@@ -88,6 +93,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
       drivetrain.setBrake();
+      teleopController.resetTimer();
     }
 
 	@Override

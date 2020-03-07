@@ -11,8 +11,11 @@ public class ClimbingMechanism {
 
     private static ClimbingMechanism instance;
     //Port numbers should be fixed later //Delete this comment when done
-    private static TalonSRX climberWinch = new TalonSRX(6);
-    private static TalonSRX climberElevator = new TalonSRX(5);
+    private TalonSRX climberWinch = new TalonSRX(6);
+    private TalonSRX climberElevator = new TalonSRX(5);
+
+    private static double ELEVATOR_SPEED = 0.4;
+    private static double WINCH_SPEED = 0.4;
 
     private ClimbingMechanism() {}
 
@@ -69,15 +72,15 @@ public class ClimbingMechanism {
     }
 
     private void climberWinchON() {
-        climberWinch.set(ControlMode.PercentOutput, 0);
+        climberWinch.set(ControlMode.PercentOutput, WINCH_SPEED);
     }
 
     private void climberWinchOFF() {
-        climberWinch.set(ControlMode.PercentOutput, 0);
+        climberWinch.set(ControlMode.PercentOutput, 0.0);
     }
 
     private void climberElevatorON() {
-        climberElevator.set(ControlMode.PercentOutput, 0);
+        climberElevator.set(ControlMode.PercentOutput, ELEVATOR_SPEED);
     }
 
     private void climberElevatorOFF() {
