@@ -55,8 +55,8 @@ public class TeleopController {
             shootingMech::reverseFeeder, intakeMech::off);
         operatorController.bindButtonToggle(LogitechOperatorController.TOP_LEFT_BASE_BUTTON, 
                  intakeMech::indexerAndIntakes, intakeMech::intakeIdle);  
-        operatorController.bindButtonToggle(LogitechOperatorController.TOP_RIGHT_BASE_BUTTON, 
-                 intakeMech::indexerAndIntakes, intakeMech::intakeIdle); 
+        operatorController.bindButton(LogitechOperatorController.TOP_RIGHT_BASE_BUTTON, 
+                 intakeMech::indexerAndIntakes/*, intakeMech::intakeIdle*/); 
         operatorController.bindButtonToggle(LogitechOperatorController.MIDDLE_LEFT_BASE_BUTTON, 
                  intakeMech::reverseEverything, intakeMech::intakeIdle);
 
