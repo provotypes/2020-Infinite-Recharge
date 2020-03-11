@@ -2,9 +2,10 @@ package frc.robot;
 
 import com.analog.adis16470.frc.ADIS16470_IMU.ADIS16470CalibrationTime;
 import com.analog.adis16470.frc.ADIS16470_IMU.IMUAxis;
-import com.revrobotics.*;
 import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -35,6 +36,7 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
     LimelightVisionTracking limelight = LimelightVisionTracking.getInstance();
 
     private static double kP = 0.01;
+    private static double turningkP = 0.01;
 
     private Drivetrain() {
 		super(leftGroup, rightGroup);
@@ -180,7 +182,22 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
 
         arcadeDrive(xSpeed, -outputValue, false);
         SmartDashboard.putNumber("Limelight HorizontalAngle",  limelight.getHorizontalAngle());
+    }
 
+    public void drivetrainTurn(double xSpeed, double turnValue){
+        kP = SmartDashboard.getNumber("turn_kP", 0);
+
+        double turnPower = (getCurrentAngle() - turnValue) * turningkP;
+
+         if (inRange(turnPower, -MIN_POWER, MIN_POWER)) {
+            turnPower = MIN_POWER * -Math.signum(getCurrentAngle());
+        }
+
+        if ((getCurrentAngle() > MIN_ANGLE_THRESHOLD) && (getCurrentAngle() < -MIN_ANGLE_THRESHOLD)) {
+            turnPower = 0;
+        }
+
+        arcadeDrive(xSpeed, turnPower, false);
 
     }
 
