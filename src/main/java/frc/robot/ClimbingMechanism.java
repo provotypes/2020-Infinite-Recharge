@@ -14,8 +14,8 @@ public class ClimbingMechanism {
     private TalonSRX climberWinch = new TalonSRX(6);
     private TalonSRX climberElevator = new TalonSRX(5);
 
-    private static double ELEVATOR_SPEED = 0.4;
-    private static double WINCH_SPEED = 0.4;
+    private static double ELEVATOR_SPEED = 0.2;
+    private static double WINCH_SPEED = 0.05;
 
     private ClimbingMechanism() {}
 

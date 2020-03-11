@@ -12,7 +12,7 @@ public class Path {
    * and the total length to drive.
    *
    * @param derivative the derivative of the path to drive along
-   * @param length the total length to drive
+   * @param length the total length to drive, this is always positive, use the drive speed to control direction
    */
   public Path(Function<Double, Double> derivative, double length) {
     this.derivative = derivative;

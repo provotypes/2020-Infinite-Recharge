@@ -20,7 +20,7 @@ public class Robot extends TimedRobot {
   private TaskInterface autoRoutine;
   private boolean isTaskRunning = false;
   private LimelightVisionTracking limelight = LimelightVisionTracking.getInstance();
-  private static ColorSensor colorSensor = ColorSensor.getInstance();
+  // private static ColorSensor colorSensor = ColorSensor.getInstance();
 
   private PowerDistributionPanel pdp = new PowerDistributionPanel();
 
@@ -31,11 +31,13 @@ public class Robot extends TimedRobot {
   
   @Override
   public void robotInit() {
-    colorSensor.matchColors();
+    // colorSensor.matchColors();
     teleopController.TeleopInit();
     drivetrain.setCoast();
 
     AutoSetup.init();
+
+    SmartDashboard.putBoolean("Calibrate gyro", false);
   }
 
   
@@ -58,6 +60,11 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("shooter calc power", ShooterCalculator.calculateRPM(limelight.getDistance()));
 
     SmartDashboard.putNumber("total current", pdp.getTotalCurrent());
+
+    if (SmartDashboard.getBoolean("Calibrate gyro", false)) {
+      drivetrain.calibrateGyro();
+      SmartDashboard.putBoolean("Calibrate gyro", false);
+    }
   }
 
   @Override
@@ -98,7 +105,6 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopPeriodic() {
-    colorSensor.ourColor();
     teleopController.update();
     shooter.update();
     intake.update();

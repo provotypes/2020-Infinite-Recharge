@@ -1,5 +1,6 @@
 package frc.robot.autotasks;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Drivetrain;
 import frc.robot.IntakeMechanism;
@@ -11,6 +12,9 @@ public class ShootingMechanismTask implements TaskInterface {
 	private Drivetrain drivetrain = Drivetrain.getInstance();
 	private IntakeMechanism intake = IntakeMechanism.getInstance();
 
+	private Timer timer = new Timer();
+
+	private double maxTime = 15;
 	private int numberOfBalls;
 	private double flywheelVelocity;
 	private int ballsShot;
@@ -18,13 +22,20 @@ public class ShootingMechanismTask implements TaskInterface {
 	private boolean shooterAtTarget;
 
 	public ShootingMechanismTask(int numberOfBalls) {
+		this(numberOfBalls, 15);
+	}
+
+	public ShootingMechanismTask(int numberOfBalls, double maxTime) {
 		this.numberOfBalls = numberOfBalls;
+		this.maxTime = maxTime;
 	}
 
 	@Override
 	public void start() {
 		ballsShot = 0;
 		shooterAtTarget = false;
+		timer.reset();
+		timer.start();
 	}
 
 	@Override
@@ -48,7 +59,7 @@ public class ShootingMechanismTask implements TaskInterface {
 
 	@Override
 	public boolean isFinished() {
-		if (ballsShot >= numberOfBalls) {
+		if ((ballsShot >= numberOfBalls) || (timer.get() > maxTime)) {
 			return true;
 		} else {
 			return false;

@@ -17,22 +17,27 @@ public class AutoSetup {
         public static final String RIGHT_SIDE_AUTO = "Right Side Start";
         public static final String MIDDLE_AUTO = "Middle  Start";
         public static final String LEFT_SIDE_AUTO =  "Left Side Start";
+        public static final String TRENCH_AUTO = "Trench pickup";
+        public static final String FORWARD_AUTO = "forward drive shoot";
 
     public static void init() {
-       autoChooser.addOption("Default Auto", DEFAULT_AUTO);
-       autoChooser.addOption("Right Side Start", RIGHT_SIDE_AUTO);
-       autoChooser.addOption("Middle Side Start", MIDDLE_AUTO);
-       autoChooser.addOption("Left Side Start", LEFT_SIDE_AUTO);
-       
-       SmartDashboard.putData("Auto Choice", autoChooser);
+        
+        autoChooser.setDefaultOption("Default Auto", DEFAULT_AUTO);
+        autoChooser.addOption("Right Side Start", RIGHT_SIDE_AUTO);
+        autoChooser.addOption("Middle Side Start", MIDDLE_AUTO);
+        autoChooser.addOption("Left Side Start", LEFT_SIDE_AUTO);
+        autoChooser.addOption("Trench pickup", TRENCH_AUTO);
+        autoChooser.addOption("forward drive shoot", FORWARD_AUTO);
 
-       EasyPathConfig pathConfig = new EasyPathConfig(
-        drivetrain::setLeftRightDriveSpeed,
-        drivetrain::getInchesTraveled,
-        drivetrain::getCurrentAngle,
-        drivetrain::resetEncodersAndGyro,
-        0.05
-    );
+        SmartDashboard.putData("Auto Choice", autoChooser);
+
+        EasyPathConfig pathConfig = new EasyPathConfig(
+            drivetrain::setLeftRightDriveSpeed,
+            drivetrain::getInchesTraveled,
+            drivetrain::getCurrentAngle,
+            drivetrain::resetEncodersAndGyro,
+            0.05
+        );
         EasyPath.configure(pathConfig);
     }
     public static SendableChooser<String> getAutoChooser() {

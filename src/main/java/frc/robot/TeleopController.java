@@ -3,7 +3,6 @@ package frc.robot;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.buttons.Trigger;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TeleopController {
@@ -12,8 +11,6 @@ public class TeleopController {
    
     private ShootingMechanism shootingMech = ShootingMechanism.getInstance();
     private IntakeMechanism intakeMech = IntakeMechanism.getInstance();
-    private LimelightVisionTracking limelight = LimelightVisionTracking.getInstance();
-    private ControlPanelMechanism controlPanel = ControlPanelMechanism.getInstance();
     private ClimbingMechanism climber = ClimbingMechanism.getInstance();
     private Drivetrain drivetrain = Drivetrain.getInstance();
     private LogitechDriverController driverController = new LogitechDriverController(0);
@@ -48,14 +45,14 @@ public class TeleopController {
         // operatorController.bindButtonToggle(LogitechOperatorController.TRIGGER, shootingMech.hoodPositioning(), shootingMech.);
         operatorController.bindButtonToggle(LogitechOperatorController.TOP_RIGHT_TOP_BUTTON, 
                     this::limelightForceShooting, () -> {isHumanControlled = true; shootingMech.off();});
-        operatorController.bindButtonToggle(LogitechOperatorController.BOTTOM_RIGHT_BASE_BUTTON, 
+        operatorController.bindButtonToggle(LogitechOperatorController.BOTTOM_RIGHT_BASE_BUTTON,
                     shootingMech::slowShoot, shootingMech::off);
         operatorController.bindButtonToggle(LogitechOperatorController.MIDDLE_RIGHT_BASE_BUTTON,
-                    shootingMech::reverseFeeder, shootingMech::off);
+            intakeMech::reverseIndexer, shootingMech::off);
         operatorController.bindButtonToggle(LogitechOperatorController.THUMB_BUTTON, 
                  intakeMech::indexer, intakeMech::off);
         operatorController.bindButtonToggle(LogitechOperatorController.BOTTOM_LEFT_BASE_BUTTON,
-                 intakeMech::reverseIndexer, intakeMech::off);
+            shootingMech::reverseFeeder, intakeMech::off);
         operatorController.bindButtonToggle(LogitechOperatorController.TOP_LEFT_BASE_BUTTON, 
                  intakeMech::indexerAndIntakes, intakeMech::intakeIdle);  
         operatorController.bindButtonToggle(LogitechOperatorController.TOP_RIGHT_BASE_BUTTON, 

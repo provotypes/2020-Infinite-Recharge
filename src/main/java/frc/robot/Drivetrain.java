@@ -1,24 +1,19 @@
 package frc.robot;
 
-import com.analog.adis16470.frc.ADIS16470_IMU;
 import com.analog.adis16470.frc.ADIS16470_IMU.ADIS16470CalibrationTime;
 import com.analog.adis16470.frc.ADIS16470_IMU.IMUAxis;
 import com.revrobotics.*;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.trajectory.constraint.TrajectoryConstraint.MinMax;
 import frc.robot.easypath.EasyPathDrivetrain;
 
 public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain {
    
-    public static final double DISTANCE_PER_ROTATION = 1.0d/8.0d * 5.94d * Math.PI; // inches //Find Specific 2020 # later
-    // public static final double DISTANCE_PER_ROTATION = 1;
-
+    public static final double DISTANCE_PER_ROTATION = 1.0d/8.0d * 6.1d * Math.PI; // inches
     private static CANEncoder frontLeftEncoder;
     private static CANEncoder rearLeftEncoder;
     private static CANEncoder frontRightEncoder;
@@ -65,10 +60,9 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
         rearRightEncoder.setPositionConversionFactor(DISTANCE_PER_ROTATION);
         resetEncodersAndGyro();
         IMU.setYawAxis(IMUAxis.kZ);
-        // IMU.configCalTime(ADIS16470CalibrationTime._64s);
+        
 
         SmartDashboard.putNumber("drivetrain_kP", kP);
-        // IMU.calibrate();
     }
     
     public static Drivetrain getInstance() {
@@ -128,8 +122,7 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
 	}
 
 	public void calibrateGyro() {
-        IMU.configCalTime(ADIS16470CalibrationTime._64s);
-        // IMU.calibrate();
+        IMU.configCalTime(ADIS16470CalibrationTime._8s);
         IMU.calibrate();
     }
 
@@ -147,8 +140,14 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
 
         double gyroRate = IMU.getRate();
         if ((inRange(outTurn, -0.1, 0.1)) && (!inRange(gyroRate, -1, 1))) {
-            outTurn += (gyroRate * 0.003);
+            if (inRange(outSpeed, -0.1, 0.1)) {
+                outTurn += (gyroRate * 0.004);
+            }
+            else {
+                outTurn += (gyroRate * 0.004) * (Math.abs(outSpeed) * 10);
+            }
             SmartDashboard.putBoolean("turnfix", true);
+            SmartDashboard.putNumber("turnFix turn", outTurn);
         }
         else {
             SmartDashboard.putBoolean("turnfix", false);

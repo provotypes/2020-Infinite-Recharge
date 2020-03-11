@@ -45,8 +45,6 @@ public class ShootingMechanism {
     private double hoodDistance;
     private final double FLY_WHEEL_SPEED_THRESH = 20;
     private final double BALL_FEEDER_SPEED = 0.6;
-    private final double SHOOTER_DEFAULT_SPEED = 0.7;
-    private final double DRIVE_TRAIN_THRESHOLD = 0.5;
     private final double MAX_HOOD_POSITION = 0.8;
     private final double MIN_HOOD_POSITION = 0.2;
     private final double IDLE_HOOD_POSITION = 0.5;

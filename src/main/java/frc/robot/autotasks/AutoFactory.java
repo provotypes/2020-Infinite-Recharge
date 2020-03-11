@@ -15,6 +15,24 @@ public class AutoFactory {
         taskList.add(new ShootingMechanismTask(3));
         return taskList;
     }
+
+    public static List<TaskInterface> TRENCH_AUTO() {
+        List<TaskInterface> taskList = new ArrayList<TaskInterface>();
+        taskList.add(new ShootingMechanismTask(3, 6));
+        taskList.add(new IntakeMechanismTask());
+        taskList.add(new EasyPathTask(new FollowPath(PathUtil.createStraightPath(5), -0.5)));
+        taskList.add(new EasyPathTask(new FollowPath(PathUtil.createStraightPath(60), 0.4)));
+        taskList.add(new ShootingMechanismTask(3, 6));
+        return taskList;
+    }
+
+    public static List<TaskInterface> FORWARD_AUTO() {
+        List<TaskInterface> taskList = new ArrayList<TaskInterface>();
+        taskList.add(new IntakeMechanismTask());
+        taskList.add(new EasyPathTask(new FollowPath(PathUtil.createStraightPath(12), -0.4)));
+        taskList.add(new ShootingMechanismTask(4, 10));
+        return taskList;
+    }
     
     public static List<TaskInterface> RIGHT_SIDE_AUTO() {
 		List<TaskInterface> taskList = new ArrayList<TaskInterface>();

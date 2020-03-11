@@ -26,6 +26,12 @@ public class AutoChooser {
 			case AutoSetup.LEFT_SIDE_AUTO:
 				chosenRoutine = new AutoRoutine(AutoFactory.LEFT_SIDE_AUTO());
 				break;
+			case AutoSetup.TRENCH_AUTO:
+				chosenRoutine = new AutoRoutine(AutoFactory.TRENCH_AUTO());
+				break;
+			case AutoSetup.FORWARD_AUTO:
+				chosenRoutine = new AutoRoutine(AutoFactory.FORWARD_AUTO());
+				break;
 			case AutoSetup.DEFAULT_AUTO:
 			default:
 				chosenRoutine = new AutoRoutine(AutoFactory.DEFAULT_AUTO());
