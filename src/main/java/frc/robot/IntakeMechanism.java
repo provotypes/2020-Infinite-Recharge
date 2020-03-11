@@ -18,7 +18,7 @@ public class IntakeMechanism {
     // Port number is wrong here
     // private static TalonSRX greenWheels = new TalonSRX();
    
-    private final double INDEXER_PERCENT = 0.6;
+    private final double INDEXER_PERCENT = 0.4;
     private final double INDEXER_REVERSE = -0.9;
     private final double OUTER_INTAKE_PERCENT = 0.95;
     private final double INNER_INTAKE_PERCENT = -0.3;
@@ -29,6 +29,9 @@ public class IntakeMechanism {
 
     private IntakeMechanism() {
         time.start();
+
+        // indexer.enableCurrentLimit(true);
+        // indexer.configContinuousCurrentLimit(10);
     }
 
     public static IntakeMechanism getInstance() {
@@ -92,7 +95,7 @@ public class IntakeMechanism {
         this.mode = IntakeMechanismModes.indexerReverse;
     }
   
-    private void executeOff() {  
+    private void executeOff() {
         outerIntakeWheelsOFF();
         innerIntakeWheelsOFF();
         indexerOFF();
