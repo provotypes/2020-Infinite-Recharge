@@ -141,10 +141,13 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
         double gyroRate = IMU.getRate();
         if ((inRange(outTurn, -0.1, 0.1)) && (!inRange(gyroRate, -1, 1))) {
             if (inRange(outSpeed, -0.1, 0.1)) {
-                outTurn += (gyroRate * 0.004);
+                // outTurn += (gyroRate * 0.003);
             }
+            // else if (inRange(outSpeed, -0.4, 0.4)) {
+            //     outTurn += (gyroRate * 0.004) * (Math.abs(outSpeed) * 7);
+            // }
             else {
-                outTurn += (gyroRate * 0.004) * (Math.abs(outSpeed) * 10);
+                outTurn += (gyroRate * 0.0035) * (Math.abs(outSpeed) * 3);
             }
             SmartDashboard.putBoolean("turnfix", true);
             SmartDashboard.putNumber("turnFix turn", outTurn);
