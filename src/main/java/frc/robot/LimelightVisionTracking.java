@@ -14,6 +14,7 @@ public class LimelightVisionTracking {
     private NetworkTableEntry ty = table.getEntry("ty");
     private NetworkTableEntry tv = table.getEntry("tv");
     private NetworkTableEntry pipeline = table.getEntry("pipeline");
+    // stream
 
     //fix me
     private final double REL_TARGET_HEIGHT = 98.25-16.5; // this should definitly be changed || the target height - shooter height. 
@@ -21,8 +22,16 @@ public class LimelightVisionTracking {
     private final double DISTANCE_THRESHOLD = 200;
     private LimelightVisionTracking() {
         SmartDashboard.putNumber("limelight angle", MOUNT_ANGLE);
-        PortForwarder.add(5801, "http://10.68.44.11", 80);
-        PortForwarder.add(5800, "http://10.68.44.11", 80);
+        // next lines litterally stollen from 5254, thanks guys for finding that darn IP and mentioning it!
+        // Set up port forwarding so we can access the limelight over USB :)
+        // visit '172.22.11.2:5801' in your browser (ie, Chrome) on the laptop
+        // to see the limelight
+        // ... maybe
+        // Not sure why 5805 is required. Someone recommended it
+        // Probably internal limelight networking stuff
+        PortForwarder.add(5800, "limelight.local", 5800);
+        PortForwarder.add(5801, "limelight.local", 5801);
+        PortForwarder.add(5805, "limelight.local", 5805);
     }
 
     public static LimelightVisionTracking getInstance() {
@@ -38,13 +47,16 @@ public class LimelightVisionTracking {
     } 
 
     public double getDistance() {
+        if (!targetFound()) {
+            return 270.0;
+        }
         double angleInRadians = ((SmartDashboard.getNumber("limelight angle", MOUNT_ANGLE) + ty.getDouble(0.0)) * Math.PI) / 180;
         double distance = REL_TARGET_HEIGHT/Math.tan(angleInRadians);
         return distance;
     }
 
     public boolean targetFound() {
-        return tv.getBoolean(true);
+        return tv.getNumber(1).intValue() == 1;
     }
 
     public void optimizedDistance(){

@@ -13,6 +13,7 @@ public class TeleopController {
     private IntakeMechanism intakeMech = IntakeMechanism.getInstance();
     private ClimbingMechanism climber = ClimbingMechanism.getInstance();
     private Drivetrain drivetrain = Drivetrain.getInstance();
+    private LimelightVisionTracking limelight = LimelightVisionTracking.getInstance();
     private LogitechDriverController driverController = new LogitechDriverController(0);
     private LogitechOperatorController operatorController = new LogitechOperatorController(1);
 
@@ -39,6 +40,8 @@ public class TeleopController {
 
     public void TeleopInit() {
         System.out.println("Teleop has started!");
+        operatorController.clear();
+        driverController.clear();
     
         operatorController.bindButton(LogitechOperatorController.TRIGGER, this::limelightShooting);
         operatorController.bindButtonRelease(LogitechOperatorController.TRIGGER, () -> {isHumanControlled = true; shootingMech.off();});
@@ -66,6 +69,7 @@ public class TeleopController {
                     //  this::winch, climber::off);
         
         driverController.bindAxes(LogitechDriverController.LEFT_Y_AXIS, LogitechDriverController.RIGHT_X_AXIS, this::arcade);
+        isHumanControlled = true;
     }
 
     public void update(){
@@ -100,11 +104,15 @@ public class TeleopController {
     }
 
     private void limelightShooting() {
-        isHumanControlled = false;
-
-        double outSpeed = 0.3 * driverController.getLeftY();
-
-        drivetrain.drvietrainAngleLineup(outSpeed);
+        if (limelight.targetFound()) {
+            isHumanControlled = false;
+            double outSpeed = 0.3 * driverController.getLeftY();
+            drivetrain.drvietrainAngleLineup(outSpeed);
+        }
+        else {
+            isHumanControlled = true;
+        }
+        
         shootingMech.shoot();
     }
 

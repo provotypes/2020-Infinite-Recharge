@@ -14,6 +14,7 @@ public final class ShooterCalculator {
     private static boolean initialized = false;
 
     private static Map<Integer, Double> powerTable = new HashMap<>();
+    private static Vector<Integer> distanceVals = new Vector<>();
 
     private ShooterCalculator() {
         throw new UnsupportedOperationException(
@@ -30,8 +31,21 @@ public final class ShooterCalculator {
     }
 
     public static int roundDis(double in) {
+        if (!initialized) {
+            init();
+        }
+        int out;
+
+        if (in < distanceVals.get(0)) {
+            out = distanceVals.get(0);
+        }
+        else if (in > distanceVals.lastElement()) {
+            out = distanceVals.lastElement();
+        }
+        else {
+            out = (int)(Math.round((in - 20.0) / 50.0d) * 50.0d) + 20;
+        }
         
-        int out = (int)(Math.round(in / 50.0d) * 50.0d) + 20;
         return out;
     }
 
@@ -53,6 +67,7 @@ public final class ShooterCalculator {
             File dataFile = new File(Filesystem.getDeployDirectory().getPath().concat("/ShooterTable.csv"));
             System.out.println("---------------" + dataFile.toString());
             powerTable.clear();
+            distanceVals.clear();
             try {
                 List<double[]> records = new ArrayList<>();
                 BufferedReader br = new BufferedReader(new FileReader(dataFile));
@@ -69,6 +84,7 @@ public final class ShooterCalculator {
 
                 for (int i = 0; i < records.size(); i++) {
                     powerTable.put((int) records.get(i)[0], records.get(i)[1]);
+                    distanceVals.add((int) records.get(i)[0]);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

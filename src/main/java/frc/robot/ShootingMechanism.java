@@ -141,7 +141,11 @@ public class ShootingMechanism {
 
     private void executeShoot() {
         shooterON();
-        if (shooterEncoder.getVelocity() < (-ShooterCalculator.calculateRPM(limelight.getDistance()) + FLY_WHEEL_SPEED_THRESH)) {
+        double distance = limelight.getDistance();
+        if ((shooterEncoder.getVelocity() < (-ShooterCalculator.calculateRPM(distance) + FLY_WHEEL_SPEED_THRESH))
+                        && limelight.targetFound()
+                        && inRange(limelight.getHorizontalAngle(), -1, 1)
+                        && inRange(distance - ShooterCalculator.roundDis(distance), -5, 5)) {
             ballFeederON();
         } else {
             ballFeederOFF();
@@ -197,4 +201,21 @@ public class ShootingMechanism {
     public double shooterSetpoint() {
         return -ShooterCalculator.calculateRPM(limelight.getDistance());
     }
+
+    /**
+     * 
+     * @param input input value
+     * @param low lower bound
+     * @param high upper bound
+     * @return if input is between low and high (inclusive)
+     */
+    private boolean inRange(double input, double low, double high) {
+        if ((input >= low) && (input <= high)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
 }
