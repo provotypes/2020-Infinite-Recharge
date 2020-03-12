@@ -3,10 +3,11 @@ package frc.robot.autotasks;
 import java.util.ArrayList;
 import java.util.List;
 
+import frc.robot.Drivetrain;
 import frc.robot.easypath.*;
 
 public class AutoFactory {
-
+    
     public static List<TaskInterface> DEFAULT_AUTO() {
         List<TaskInterface> taskList = new ArrayList<TaskInterface>();
         taskList.add(new IntakeMechanismTask());
@@ -27,7 +28,11 @@ public class AutoFactory {
 
     public static List<TaskInterface> FORWARD_AUTO() {
         List<TaskInterface> taskList = new ArrayList<TaskInterface>();
-        taskList.add(new DrivetrainRotation(90));
+        taskList.add(new ShootingMechanismTask(3, 6));
+        taskList.add(new DrivetrainRotation(0));
+        taskList.add(new IntakeMechanismTask());
+        taskList.add(new EasyPathTask(new FollowPath(PathUtil.createStraightPath(120), 0.4)));
+        taskList.add(new ShootingMechanismTask(3, 6));
         return taskList;
     }
     
