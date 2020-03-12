@@ -39,7 +39,8 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
     private IMUAngleTracker IMU = new IMUAngleTracker();
     private double xP;
     private final double MIN_POWER = 0.06;
-    private final double MIN_ANGLE_THRESHOLD = 0.6;
+    private final double TURN_MIN_ANGLE_DEGREES = 1;
+      
     LimelightVisionTracking limelight = LimelightVisionTracking.getInstance();
 
     private static double kP = 0.01;
@@ -72,6 +73,7 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
         
 
         SmartDashboard.putNumber("drivetrain_kP", kP);
+        SmartDashboard.putNumber("turn_kP", 0);
     }
     
     public static Drivetrain getInstance() {
@@ -204,7 +206,7 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
         if (inRange(outputTurn, -MIN_POWER, MIN_POWER)) {
             outputTurn = MIN_POWER * Math.signum(tx);
         }
-        if ((tx > MIN_ANGLE_THRESHOLD) && (tx < -MIN_ANGLE_THRESHOLD)) {
+        if ((tx > TURN_MIN_ANGLE_DEGREES) && (tx < -TURN_MIN_ANGLE_DEGREES)) {
             outputTurn = 0;
         }
 
@@ -212,21 +214,27 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
         SmartDashboard.putNumber("Limelight HorizontalAngle",  limelight.getHorizontalAngle());
     }
 
-    public void drivetrainTurn(double xSpeed, double turnValue){
-        kP = SmartDashboard.getNumber("turn_kP", 0);
+    public void drivetrainTurn(double xSpeed, double targetAngle){
+        turningkP = SmartDashboard.getNumber("turn_kP", 0);
 
-        double turnPower = (getCurrentAngle() - turnValue) * turningkP;
+        double turnPower = (getCurrentAngle() - targetAngle) * turningkP;
 
          if (inRange(turnPower, -MIN_POWER, MIN_POWER)) {
-            turnPower = MIN_POWER * -Math.signum(getCurrentAngle());
+            turnPower = MIN_POWER * Math.signum(turnPower);
         }
 
-        if ((getCurrentAngle() > MIN_ANGLE_THRESHOLD) && (getCurrentAngle() < -MIN_ANGLE_THRESHOLD)) {
+        if (inRange(getCurrentAngle() - targetAngle, -TURN_MIN_ANGLE_DEGREES, TURN_MIN_ANGLE_DEGREES)) {
             turnPower = 0;
         }
 
-        arcadeDrive(xSpeed, turnPower, false);
+        if (turnPower > 0.5){
+            turnPower = 0.5;
+        } else if (turnPower < -0.5){
+            turnPower = -0.5;
+        }
 
+        arcadeDrive(xSpeed, turnPower, false); 
+        
     }
 
     public void antiTippingMechanism() {
