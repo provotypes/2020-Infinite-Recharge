@@ -119,7 +119,6 @@ public class Robot extends TimedRobot {
 	public void testPeriodic() {  
     // shooter.update();
     // shooter.executeOff();
-    shooter.hood.set(0);
   }
   
 }

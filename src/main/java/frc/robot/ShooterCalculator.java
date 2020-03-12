@@ -39,6 +39,10 @@ public final class ShooterCalculator {
         return (tableVal != null ? tableVal.doubleValue() : 0);
     }
 
+    // public static int getRoundDis() {
+
+    // }
+
     public static int roundDis(double in) {
         int out = (int)in;
         out = (out / 12) * 12;

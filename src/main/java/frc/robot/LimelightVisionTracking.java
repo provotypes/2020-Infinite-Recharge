@@ -4,6 +4,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpiutil.net.PortForwarder;
 
 public class LimelightVisionTracking {
 
@@ -20,6 +21,8 @@ public class LimelightVisionTracking {
     private final double DISTANCE_THRESHOLD = 200;
     private LimelightVisionTracking() {
         SmartDashboard.putNumber("limelight angle", MOUNT_ANGLE);
+        PortForwarder.add(5801, "http://10.68.44.11", 80);
+        PortForwarder.add(5800, "http://10.68.44.11", 80);
     }
 
     public static LimelightVisionTracking getInstance() {
