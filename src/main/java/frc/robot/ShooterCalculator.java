@@ -14,7 +14,6 @@ public final class ShooterCalculator {
     private static boolean initialized = false;
 
     private static Map<Integer, Double> powerTable = new HashMap<>();
-    private static Map<Integer, Double> angleTable = new HashMap<>();
 
     private ShooterCalculator() {
         throw new UnsupportedOperationException(
@@ -30,22 +29,9 @@ public final class ShooterCalculator {
         return (tableVal != null ? tableVal.doubleValue() : 0);
     }
 
-    public static double calculateAngle(double distance) {
-        if (!initialized) {
-            init();
-        }
-        int roundDistance = roundDis(distance);
-        Double tableVal = angleTable.get(roundDistance);
-        return (tableVal != null ? tableVal.doubleValue() : 0);
-    }
-
-    // public static int getRoundDis() {
-
-    // }
-
     public static int roundDis(double in) {
-        int out = (int)in;
-        out = (out / 12) * 12;
+        
+        int out = (int)(Math.round(in / 50.0d) * 50.0d) + 20;
         return out;
     }
 
@@ -59,7 +45,6 @@ public final class ShooterCalculator {
         int lookupDis = roundDis(dis);
 
         powerTable.replace(lookupDis, rpm);
-        angleTable.replace(lookupDis, angle);
     }
 
     public static void init() {
@@ -68,8 +53,6 @@ public final class ShooterCalculator {
             File dataFile = new File(Filesystem.getDeployDirectory().getPath().concat("/ShooterTable.csv"));
             System.out.println("---------------" + dataFile.toString());
             powerTable.clear();
-            angleTable.clear();
-
             try {
                 List<double[]> records = new ArrayList<>();
                 BufferedReader br = new BufferedReader(new FileReader(dataFile));
@@ -86,11 +69,9 @@ public final class ShooterCalculator {
 
                 for (int i = 0; i < records.size(); i++) {
                     powerTable.put((int) records.get(i)[0], records.get(i)[1]);
-                    angleTable.put((int) records.get(i)[0], records.get(i)[2]);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-
             }
 
             initialized = true;

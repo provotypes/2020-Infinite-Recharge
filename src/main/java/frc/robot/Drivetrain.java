@@ -12,6 +12,13 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.easypath.EasyPathDrivetrain;
 
+
+/**
+ * NOTE!!! for arcadeDrive
+ * POSITIVE is CLOCKWISE 
+ * POSITIVE moves robot towards the SHOOTER SIDE
+ * 
+ */
 public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain {
    
     public static final double DISTANCE_PER_ROTATION = 1.0d/8.0d * 6.1d * Math.PI; // inches
@@ -165,25 +172,43 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
             quickTurn = false;
         }
 
+
+        SmartDashboard.putNumber("outSpeed", outSpeed);
+        SmartDashboard.putNumber("OutTurn", outTurn);
+
         super.curvatureDrive(outSpeed, outTurn, quickTurn);
     }
 
     public void drvietrainAngleLineup(double xSpeed) {
         kP = SmartDashboard.getNumber("drivetrain_kP", 0);
-        double outputValue = 0.0;
+        double outputTurn = 0.0;
+        double outputSpeed = 0.0;
         double tx = limelight.getHorizontalAngle();
+        double distance = limelight.getDistance();
 
-        outputValue = -tx * kP;
-
-        if (inRange(outputValue, -MIN_POWER, MIN_POWER)) {
-            outputValue = MIN_POWER * -Math.signum(tx);
+        outputTurn = -tx * kP;
+        if (limelight.targetFound()) {
+            outputSpeed = (distance - ShooterCalculator.roundDis(distance)) * 0.01;
+        }
+        else {
+            outputSpeed = xSpeed;
         }
 
+        if (inRange(outputSpeed, -0.1, 0.1)) {
+            outputSpeed = 0.1 * Math.signum(outputSpeed);
+        }
+        if (inRange(distance - ShooterCalculator.roundDis(distance), -5, 5)) {
+            outputSpeed = 0;
+        }
+        
+        if (inRange(outputTurn, -MIN_POWER, MIN_POWER)) {
+            outputTurn = MIN_POWER * Math.signum(tx);
+        }
         if ((tx > MIN_ANGLE_THRESHOLD) && (tx < -MIN_ANGLE_THRESHOLD)) {
-            outputValue = 0;
+            outputTurn = 0;
         }
 
-        arcadeDrive(xSpeed, -outputValue, false);
+        arcadeDrive(outputSpeed, -outputTurn, false);
         SmartDashboard.putNumber("Limelight HorizontalAngle",  limelight.getHorizontalAngle());
     }
 

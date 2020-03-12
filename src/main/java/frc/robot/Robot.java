@@ -56,7 +56,6 @@ public class Robot extends TimedRobot {
     }
 
     SmartDashboard.putNumber("shooter calc dis", ShooterCalculator.roundDis(limelight.getDistance()));
-    SmartDashboard.putNumber("shooter calc angle", ShooterCalculator.calculateAngle(limelight.getDistance()));
     SmartDashboard.putNumber("shooter calc power", ShooterCalculator.calculateRPM(limelight.getDistance()));
 
     SmartDashboard.putNumber("total current", pdp.getTotalCurrent());
