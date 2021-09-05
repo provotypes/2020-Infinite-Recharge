@@ -15,7 +15,7 @@ public class ClimbingMechanism {
     private TalonSRX climberElevator = new TalonSRX(5);
 
     private static double ELEVATOR_SPEED = 0.2;
-    private static double WINCH_SPEED = 0.05;
+    private static double WINCH_SPEED = 0.9;
 
     private ClimbingMechanism() {}
 
@@ -28,16 +28,20 @@ public class ClimbingMechanism {
     
     enum ClimbingMechanismModes {
         off,
-        elevator,
-        winch
+        elevatorUp,
+        elevatorDown,
+        winchUp,
+        winchDown
     }
     
     private ClimbingMechanismModes mode = ClimbingMechanismModes.off;
    
     final Map<ClimbingMechanismModes, Runnable> climberModes = Map.ofEntries(
             entry(ClimbingMechanismModes.off, this::executeOff),
-            entry(ClimbingMechanismModes.winch, this::executeWinch),
-            entry(ClimbingMechanismModes.elevator, this::executeElevator)
+            entry(ClimbingMechanismModes.winchUp, this::executeWinchUp),
+            entry(ClimbingMechanismModes.winchDown, this::executeWinchDown),
+            entry(ClimbingMechanismModes.elevatorUp, this::executeElevatorUp),
+            entry(ClimbingMechanismModes.elevatorDown, this::executeElevatorDown)
         );
 
     public void update() {
@@ -48,84 +52,68 @@ public class ClimbingMechanism {
         this.mode = ClimbingMechanismModes.off;
     }
 
-    public void elevator() {
-        this.mode = ClimbingMechanismModes.elevator;
+    public void elevatorUp() {
+        this.mode = ClimbingMechanismModes.elevatorUp;
     }
 
-    public void winch() {
-        this.mode = ClimbingMechanismModes.winch;
+    public void elevatorDown() {
+        this.mode = ClimbingMechanismModes.elevatorDown;
+    }
+
+    public void winchUp() {
+        this.mode = ClimbingMechanismModes.winchUp;
+    }
+
+    public void winchDown() {
+        this.mode = ClimbingMechanismModes.winchDown;
     }
 
     private void executeOff() {
-        climberWinchOFF();
-        climberElevatorOFF();
+        climberWinchOff();
+        climberElevatorOff();
     }
 
-    private void executeElevator() {
-        climberElevatorON();
-        climberWinchOFF();
+    private void executeElevatorUp() {
+        climberElevatorOn();
+        climberWinchOff();
+    }
+    private void executeElevatorDown() {
+        climberElevatorReverse();
+        climberWinchOff();
     }
     
-    private void executeWinch() {
-        climberWinchON();
-        climberElevatorOFF();
+    private void executeWinchUp() {
+        climberWinchOn();
+        climberElevatorOff();
     }
 
-    private void climberWinchON() {
+    private void executeWinchDown() {
+        climberWinchReverse();
+        climberElevatorOff();
+    }
+
+    private void climberWinchOn() {
         climberWinch.set(ControlMode.PercentOutput, WINCH_SPEED);
     }
 
-    private void climberWinchOFF() {
+    private void climberWinchOff() {
         climberWinch.set(ControlMode.PercentOutput, 0.0);
     }
 
-    private void climberElevatorON() {
+    private void climberWinchReverse() {
+        climberWinch.set(ControlMode.PercentOutput, -WINCH_SPEED);
+    }
+
+    private void climberElevatorOn() {
         climberElevator.set(ControlMode.PercentOutput, ELEVATOR_SPEED);
     }
 
-    private void climberElevatorOFF() {
+    private void climberElevatorOff() {
         climberElevator.set(ControlMode.PercentOutput, 0);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    private void climberElevatorReverse() {
+        climberElevator.set(ControlMode.PercentOutput, -ELEVATOR_SPEED);
+    }
 
 }

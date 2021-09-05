@@ -23,8 +23,8 @@ public class TeleopController {
     private final Supplier<Double> speedMultiplierSupplier = () -> SmartDashboard.getNumber("Speed Multiplier", 0.65);
 
     private Timer teleTimer = new Timer();
-    // private static double SECONDS_IN_TELEOP = 105.0;
-    private static double SECONDS_IN_TELEOP = 5.0;
+    private static double SECONDS_IN_TELEOP = 105.0;
+    // private static double SECONDS_IN_TELEOP = 5.0;
 
     private TeleopController() {
         SmartDashboard.putNumber("Rotate Multiplier", -0.5);
@@ -40,6 +40,9 @@ public class TeleopController {
 
     public void TeleopInit() {
         System.out.println("Teleop has started!");
+
+        resetTimer();
+
         operatorController.clear();
         driverController.clear();
     
@@ -63,10 +66,10 @@ public class TeleopController {
         operatorController.bindButtonToggle(LogitechOperatorController.MIDDLE_LEFT_BASE_BUTTON, 
                  intakeMech::reverseEverything, intakeMech::intakeIdle);
 
-        // operatorController.bindButtonToggle(LogitechOperatorController.TOP_LEFT_TOP_BUTTON,
-        //              this::elevator, climber::off);
-        // operatorController.bindButtonToggle(LogitechOperatorController.BOTTOM_LEFT_TOP_BUTTON,
-                    //  this::winch, climber::off);
+        operatorController.bindButtonToggle(LogitechOperatorController.TOP_LEFT_TOP_BUTTON,
+                     this::elevatorUp, climber::off);
+        operatorController.bindButtonToggle(LogitechOperatorController.BOTTOM_LEFT_TOP_BUTTON,
+                     this::winchDown, climber::off);
         
         driverController.bindAxes(LogitechDriverController.LEFT_Y_AXIS, LogitechDriverController.RIGHT_X_AXIS, this::arcade);
         isHumanControlled = true;
@@ -116,15 +119,15 @@ public class TeleopController {
         shootingMech.shoot();
     }
 
-    private void elevator() {
+    private void elevatorUp() {
         if (teleTimer.get() > SECONDS_IN_TELEOP) {
-            climber.elevator();
+            climber.elevatorUp();
         }
     }
 
-    private void winch() {
+    private void winchDown() {
         if (teleTimer.get() > SECONDS_IN_TELEOP) {
-            climber.winch();
+            climber.winchUp();
         }
     }
 
