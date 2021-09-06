@@ -38,7 +38,7 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
     private static Drivetrain instance;
     private IMUAngleTracker IMU = new IMUAngleTracker();
     private double xP;
-    private final double MIN_POWER = 0.04;
+    private final double MIN_POWER = 0.07;
     private final double TURN_MIN_ANGLE_DEGREES = 1;
       
     LimelightVisionTracking limelight = LimelightVisionTracking.getInstance();
@@ -158,7 +158,7 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
             //     outTurn += (gyroRate * 0.004) * (Math.abs(outSpeed) * 7);
             // }
             else {
-                outTurn += (gyroRate * 0.0035) * (Math.abs(outSpeed) * 3);
+                outTurn += (gyroRate * 0.0065) * (Math.abs(outSpeed) * 3);
             }
             SmartDashboard.putBoolean("turnfix", true);
             SmartDashboard.putNumber("turnFix turn", outTurn);

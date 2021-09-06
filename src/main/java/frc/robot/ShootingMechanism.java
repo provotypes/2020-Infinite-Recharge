@@ -144,7 +144,7 @@ public class ShootingMechanism {
         double distance = limelight.getDistance();
         if ((shooterEncoder.getVelocity() < (-ShooterCalculator.calculateRPM(distance) + FLY_WHEEL_SPEED_THRESH))
                         && limelight.targetFound()
-                        && inRange(limelight.getHorizontalAngle(), -1, 1)
+                        && inRange(limelight.getHorizontalAngle(), -2, 2)
                         && inRange(distance - ShooterCalculator.roundDis(distance), -5, 5)) {
             ballFeederON();
         } else {

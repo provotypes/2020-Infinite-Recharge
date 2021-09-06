@@ -15,6 +15,7 @@ public class Robot extends TimedRobot {
   private Drivetrain drivetrain = Drivetrain.getInstance();
   private IntakeMechanism intake = IntakeMechanism.getInstance();
   private TeleopController teleopController = TeleopController.getInstance();
+  private ClimbingMechanism climber = ClimbingMechanism.getInstance();
  
 
   private TaskInterface autoRoutine;
@@ -108,6 +109,7 @@ public class Robot extends TimedRobot {
     teleopController.update();
     shooter.update();
     intake.update();
+    climber.update();
   }
 
   @Override

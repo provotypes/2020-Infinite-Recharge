@@ -10,12 +10,12 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 public class ClimbingMechanism {
 
     private static ClimbingMechanism instance;
-    //Port numbers should be fixed later //Delete this comment when done
     private TalonSRX climberWinch = new TalonSRX(6);
     private TalonSRX climberElevator = new TalonSRX(5);
 
-    private static double ELEVATOR_SPEED = 0.2;
-    private static double WINCH_SPEED = 0.9;
+    private static double ELEVATOR_SPEED = -0.7;
+    private static double ELEVATOR_DOWN_SPEED = 0.25;
+    private static double WINCH_SPEED = 1.0;
 
     private ClimbingMechanism() {}
 
@@ -113,7 +113,7 @@ public class ClimbingMechanism {
     }
 
     private void climberElevatorReverse() {
-        climberElevator.set(ControlMode.PercentOutput, -ELEVATOR_SPEED);
+        climberElevator.set(ControlMode.PercentOutput, ELEVATOR_DOWN_SPEED);
     }
 
 }

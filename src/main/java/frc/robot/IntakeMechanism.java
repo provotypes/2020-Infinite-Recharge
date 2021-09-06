@@ -15,8 +15,7 @@ public class IntakeMechanism {
     private static TalonSRX outerIntakeWheels = new TalonSRX(4);
 	private static TalonSRX innerIntakeWheels = new TalonSRX(1);
     private static TalonSRX indexer = new TalonSRX(3);
-    // Port number is wrong here
-    // private static TalonSRX greenWheels = new TalonSRX();
+    private static TalonSRX greenWheels = new TalonSRX(7);
    
     private final double INDEXER_PERCENT = 0.4;
     private final double INDEXER_REVERSE = -0.9;
@@ -174,11 +173,11 @@ public class IntakeMechanism {
     }
 
     private void greenWheelsON() {
-        // greenWheels.set(ControlMode.PercentOutput, Math.sin(time.get()));
+        greenWheels.set(ControlMode.PercentOutput, -0.3);
     }
 
     private void greenWheelsOFF() {
-        // greenWheels.set(ControlMode.PercentOutput, 0);
+        greenWheels.set(ControlMode.PercentOutput, 0);
     }
 
     private void indexerON() {

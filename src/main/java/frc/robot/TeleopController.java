@@ -23,8 +23,8 @@ public class TeleopController {
     private final Supplier<Double> speedMultiplierSupplier = () -> SmartDashboard.getNumber("Speed Multiplier", 0.65);
 
     private Timer teleTimer = new Timer();
-    private static double SECONDS_IN_TELEOP = 105.0;
-    // private static double SECONDS_IN_TELEOP = 5.0;
+    // private static double SECONDS_IN_TELEOP = 105.0;
+    private static double SECONDS_IN_TELEOP = 5.0;
 
     private TeleopController() {
         SmartDashboard.putNumber("Rotate Multiplier", -0.5);
@@ -41,26 +41,24 @@ public class TeleopController {
     public void TeleopInit() {
         System.out.println("Teleop has started!");
 
-        resetTimer();
-
         operatorController.clear();
         driverController.clear();
     
         operatorController.bindButton(LogitechOperatorController.TRIGGER, this::limelightShooting);
         operatorController.bindButtonRelease(LogitechOperatorController.TRIGGER, () -> {isHumanControlled = true; shootingMech.off();});
         // operatorController.bindButtonToggle(LogitechOperatorController.TRIGGER, shootingMech.hoodPositioning(), shootingMech.);
-        operatorController.bindButtonToggle(LogitechOperatorController.TOP_RIGHT_TOP_BUTTON, 
-                    this::limelightForceShooting, () -> {isHumanControlled = true; shootingMech.off();});
-        operatorController.bindButtonToggle(LogitechOperatorController.BOTTOM_RIGHT_BASE_BUTTON,
-                    shootingMech::slowShoot, shootingMech::off);
+        // operatorController.bindButtonToggle(LogitechOperatorController.TOP_RIGHT_TOP_BUTTON, 
+        //             this::limelightForceShooting, () -> {isHumanControlled = true; shootingMech.off();});
+        // operatorController.bindButtonToggle(LogitechOperatorController.BOTTOM_RIGHT_BASE_BUTTON,
+        //             shootingMech::slowShoot, shootingMech::off);
         operatorController.bindButtonToggle(LogitechOperatorController.MIDDLE_RIGHT_BASE_BUTTON,
-            intakeMech::reverseIndexer, shootingMech::off);
+            intakeMech::reverseIndexer, intakeMech::off);
         operatorController.bindButtonToggle(LogitechOperatorController.THUMB_BUTTON, 
                  intakeMech::indexer, intakeMech::off);
         operatorController.bindButtonToggle(LogitechOperatorController.BOTTOM_LEFT_BASE_BUTTON,
-            shootingMech::reverseFeeder, intakeMech::off);
+            shootingMech::reverseFeeder, shootingMech::off);
         operatorController.bindButtonToggle(LogitechOperatorController.TOP_LEFT_BASE_BUTTON, 
-                 intakeMech::indexerAndIntakes, intakeMech::intakeIdle);  
+                 intakeMech::indexerAndIntakes, intakeMech::intakeIdle);
         operatorController.bindButton(LogitechOperatorController.TOP_RIGHT_BASE_BUTTON, 
                  intakeMech::indexerAndIntakes/*, intakeMech::intakeIdle*/); 
         operatorController.bindButtonToggle(LogitechOperatorController.MIDDLE_LEFT_BASE_BUTTON, 
@@ -69,7 +67,11 @@ public class TeleopController {
         operatorController.bindButtonToggle(LogitechOperatorController.TOP_LEFT_TOP_BUTTON,
                      this::elevatorUp, climber::off);
         operatorController.bindButtonToggle(LogitechOperatorController.BOTTOM_LEFT_TOP_BUTTON,
-                     this::winchDown, climber::off);
+                     climber::elevatorDown, climber::off);
+        operatorController.bindButtonToggle(LogitechOperatorController.TOP_RIGHT_TOP_BUTTON, 
+                    this::winchDown, climber::off);
+        operatorController.bindButtonToggle(LogitechOperatorController.BOTTOM_RIGHT_TOP_BUTTON,
+                    climber::winchUp, climber::off);
         
         driverController.bindAxes(LogitechDriverController.LEFT_Y_AXIS, LogitechDriverController.RIGHT_X_AXIS, this::arcade);
         isHumanControlled = true;
@@ -127,7 +129,7 @@ public class TeleopController {
 
     private void winchDown() {
         if (teleTimer.get() > SECONDS_IN_TELEOP) {
-            climber.winchUp();
+            climber.winchDown();
         }
     }
 
