@@ -73,7 +73,7 @@ public class TeleopController {
         operatorController.bindButtonToggle(LogitechOperatorController.BOTTOM_RIGHT_TOP_BUTTON,
                     climber::winchUp, climber::off);
         
-        driverController.bindAxes(LogitechDriverController.LEFT_Y_AXIS, LogitechDriverController.RIGHT_X_AXIS, this::arcade);
+        driverController.bindAxes(LogitechDriverController.LEFT_Y_AXIS, LogitechDriverController.RIGHT_Y_AXIS, this::tank);
         isHumanControlled = true;
     }
 
@@ -85,6 +85,17 @@ public class TeleopController {
     public void resetTimer() {
         teleTimer.reset();
         teleTimer.start();
+    }
+
+    private void tank(double left, double right) {
+        if (isHumanControlled) {
+            double speedMultiplier = speedMultiplierSupplier.get();
+            
+            double leftOut = left * speedMultiplier;
+            double rightOut = right * speedMultiplier;
+
+            drivetrain.tankDrive(leftOut, rightOut);
+        }
     }
 
     private void arcade(double speed, double rotation) {

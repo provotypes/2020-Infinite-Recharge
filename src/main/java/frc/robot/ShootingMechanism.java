@@ -29,13 +29,13 @@ public class ShootingMechanism {
     private CANPIDController pidController;
     private Timer shooterTimer = new Timer();
 
-    private final double SHOOTER_KP = 0.0005;
-    private final double SHOOTER_KI = 0.000001;
-    private final double SHOOTER_KD = 0.0;
+    private final double SHOOTER_KP = 0.0004;
+    private final double SHOOTER_KI = 0.000000575;
+    private final double SHOOTER_KD = 1.0;
     private final double SHOOTER_I_ZONE = 2000;
-    private final double FEED_FORWARD = 0.000015;
+    private final double FEED_FORWARD = 0.0;
     
-    private final double FLY_WHEEL_SPEED_THRESH = 20;
+    private final double FLY_WHEEL_SPEED_THRESH = 30;
     private final double BALL_FEEDER_SPEED = -0.9;
     private final double FEEDER_IDLE_POWER = 0.1;
 
@@ -48,6 +48,7 @@ public class ShootingMechanism {
 
         shooter_b.follow(shooter, true);
         shooter.setIdleMode(IdleMode.kCoast);
+        shooter_b.setIdleMode(IdleMode.kCoast);
 
         pidController = shooter.getPIDController();
 
@@ -62,6 +63,13 @@ public class ShootingMechanism {
         pidController.setIZone(SHOOTER_I_ZONE);
         pidController.setFF(FEED_FORWARD);
         pidController.setOutputRange(-1, 0);
+
+        SmartDashboard.putNumber("Shooter P", SHOOTER_KP);
+        SmartDashboard.putNumber("Shooter I", SHOOTER_KI);
+        SmartDashboard.putNumber("Shooter D", SHOOTER_KD);
+        SmartDashboard.putNumber("Shooter FF", SHOOTER_KP);
+        SmartDashboard.putNumber("Shooter IZone", SHOOTER_I_ZONE);
+
 
         SmartDashboard.putNumber("set shooter dis", 0);
         SmartDashboard.putNumber("set shooter RPM", 0);
@@ -111,6 +119,12 @@ public class ShootingMechanism {
         }
         
         SmartDashboard.putNumber("shooterTimer", shooterTimer.get());
+
+        pidController.setP(SmartDashboard.getNumber("Shooter P", SHOOTER_KP));
+        pidController.setI(SmartDashboard.getNumber("Shooter I", SHOOTER_KI));
+        pidController.setD(SmartDashboard.getNumber("Shooter D", SHOOTER_KD));
+        pidController.setIZone(SmartDashboard.getNumber("Shooter IZone", SHOOTER_I_ZONE));
+        pidController.setFF(SmartDashboard.getNumber("Shooter FF", SHOOTER_KP));
         
     }
 
