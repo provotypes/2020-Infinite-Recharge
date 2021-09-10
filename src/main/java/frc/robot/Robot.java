@@ -71,6 +71,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     drivetrain.setCoast();
+    autoRoutine.end();
   }
   
   @Override
@@ -107,9 +108,13 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {
     teleopController.update();
+    // System.out.print("TeleControl");
     shooter.update();
+    // System.out.print("shooter");
     intake.update();
+    // System.out.print("intake");
     climber.update();
+    // System.out.print("climber");
   }
 
   @Override

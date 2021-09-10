@@ -67,7 +67,7 @@ public class ShootingMechanism {
         SmartDashboard.putNumber("Shooter P", SHOOTER_KP);
         SmartDashboard.putNumber("Shooter I", SHOOTER_KI);
         SmartDashboard.putNumber("Shooter D", SHOOTER_KD);
-        SmartDashboard.putNumber("Shooter FF", SHOOTER_KP);
+        SmartDashboard.putNumber("Shooter FF", FEED_FORWARD);
         SmartDashboard.putNumber("Shooter IZone", SHOOTER_I_ZONE);
 
 
@@ -124,7 +124,7 @@ public class ShootingMechanism {
         pidController.setI(SmartDashboard.getNumber("Shooter I", SHOOTER_KI));
         pidController.setD(SmartDashboard.getNumber("Shooter D", SHOOTER_KD));
         pidController.setIZone(SmartDashboard.getNumber("Shooter IZone", SHOOTER_I_ZONE));
-        pidController.setFF(SmartDashboard.getNumber("Shooter FF", SHOOTER_KP));
+        pidController.setFF(SmartDashboard.getNumber("Shooter FF", FEED_FORWARD));
         
     }
 

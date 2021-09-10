@@ -20,7 +20,7 @@ public class TeleopController {
     private boolean isHumanControlled = true;
  
     private final Supplier<Double> rotateMultiplierSupplier = () -> SmartDashboard.getNumber("Rotate Multiplier", 0.65);
-    private final Supplier<Double> speedMultiplierSupplier = () -> SmartDashboard.getNumber("Speed Multiplier", 0.65);
+    private final Supplier<Double> speedMultiplierSupplier = () -> SmartDashboard.getNumber("Speed Multiplier", 0.6);
 
     private Timer teleTimer = new Timer();
     // private static double SECONDS_IN_TELEOP = 105.0;
@@ -28,7 +28,7 @@ public class TeleopController {
 
     private TeleopController() {
         SmartDashboard.putNumber("Rotate Multiplier", -0.5);
-        SmartDashboard.putNumber("Speed Multiplier", 0.75);
+        SmartDashboard.putNumber("Speed Multiplier", 0.6);
     }
 
     public static TeleopController getInstance() {
@@ -73,11 +73,11 @@ public class TeleopController {
         operatorController.bindButtonToggle(LogitechOperatorController.BOTTOM_RIGHT_TOP_BUTTON,
                     climber::winchUp, climber::off);
         
-        driverController.bindAxes(LogitechDriverController.LEFT_Y_AXIS, LogitechDriverController.RIGHT_Y_AXIS, this::tank);
+        driverController.bindAxes(LogitechDriverController.RIGHT_Y_AXIS, LogitechDriverController.LEFT_Y_AXIS, this::tank);
         isHumanControlled = true;
     }
 
-    public void update(){
+    public void update() {
         driverController.run();
         operatorController.run();
     }
@@ -94,7 +94,7 @@ public class TeleopController {
             double leftOut = left * speedMultiplier;
             double rightOut = right * speedMultiplier;
 
-            drivetrain.tankDrive(leftOut, rightOut);
+            drivetrain.tankDrive(-rightOut, -leftOut, true);
         }
     }
 

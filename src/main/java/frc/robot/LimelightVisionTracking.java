@@ -10,9 +10,10 @@ public class LimelightVisionTracking {
 
     private static LimelightVisionTracking instance;
     private NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-    private  NetworkTableEntry tx = table.getEntry("tx");
+    private NetworkTableEntry tx = table.getEntry("tx");
     private NetworkTableEntry ty = table.getEntry("ty");
     private NetworkTableEntry tv = table.getEntry("tv");
+    private NetworkTableEntry led = table.getEntry("ledMode");
     private NetworkTableEntry pipeline = table.getEntry("pipeline");
     // stream
 
@@ -22,6 +23,7 @@ public class LimelightVisionTracking {
     private final double DISTANCE_THRESHOLD = 200;
     private LimelightVisionTracking() {
         SmartDashboard.putNumber("limelight angle", MOUNT_ANGLE);
+        led.setNumber(0);
         // next lines litterally stollen from 5254, thanks guys for finding that darn IP and mentioning it!
         // Set up port forwarding so we can access the limelight over USB :)
         // visit '172.22.11.2:5801' in your browser (ie, Chrome) on the laptop

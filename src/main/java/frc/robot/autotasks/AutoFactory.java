@@ -12,7 +12,7 @@ public class AutoFactory {
         List<TaskInterface> taskList = new ArrayList<TaskInterface>();
         taskList.add(new IntakeMechanismTask());
         taskList.add(new EasyPathTask(new FollowPath(PathUtil.createStraightPath(24), 0.4)));
-        taskList.add(new ShootingMechanismTask(3));
+        taskList.add(new ShootingMechanismTask(69));
         return taskList;
     }
 
