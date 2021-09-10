@@ -206,7 +206,7 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
         if (inRange(outputTurn, -MIN_POWER, MIN_POWER)) {
             outputTurn = MIN_POWER * Math.signum(outputTurn);
         }
-        if (inRange(tx, TURN_MIN_ANGLE_DEGREES, TURN_MIN_ANGLE_DEGREES)) {
+        if (inRange(tx, -TURN_MIN_ANGLE_DEGREES, TURN_MIN_ANGLE_DEGREES)) {
             outputTurn = 0;
         }
 
