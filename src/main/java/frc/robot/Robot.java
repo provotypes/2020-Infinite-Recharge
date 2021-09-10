@@ -71,7 +71,11 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     drivetrain.setCoast();
-    autoRoutine.end();
+    if (autoRoutine != null) {
+      autoRoutine.end();
+      shooter.update();
+      intake.update();
+    }
   }
   
   @Override
@@ -103,6 +107,9 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
       drivetrain.setBrake();
       teleopController.resetTimer();
+      if (autoRoutine != null) {
+        autoRoutine.end();
+      }
     }
 
 	@Override
