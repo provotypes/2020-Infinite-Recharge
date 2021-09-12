@@ -74,6 +74,9 @@ public class TeleopController {
                     climber::winchUp, climber::off);
         
         driverController.bindAxes(LogitechDriverController.RIGHT_Y_AXIS, LogitechDriverController.LEFT_Y_AXIS, this::tank);
+        driverController.bindButton(LogitechDriverController.RIGHT_BUMPER, () -> {this.tank(-0.9, -0.9);});
+        driverController.bindButton(LogitechDriverController.LEFT_BUMPER, () -> {this.tank(0.9, 0.9);});
+
         isHumanControlled = true;
     }
 
