@@ -15,10 +15,10 @@ public class ColorSensor {
     private  final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
     private  final ColorMatch m_colorMatcher = new ColorMatch();
     
-    Color kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
-    Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
-    Color kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
-    Color kYellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
+    Color kBlueTarget = new Color(0.143, 0.427, 0.429);
+    Color kGreenTarget = new Color(0.197, 0.561, 0.240);
+    Color kRedTarget = new Color(0.561, 0.232, 0.114);
+    Color kYellowTarget = new Color(0.361, 0.524, 0.113);
       
     private ColorSensor() {}
 

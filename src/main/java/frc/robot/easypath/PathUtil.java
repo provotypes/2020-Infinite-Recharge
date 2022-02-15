@@ -1,7 +1,7 @@
 package frc.robot.easypath;
 
 import java.util.function.Supplier;
-import javafx.geometry.Point2D;
+// import frc.robot.easypath.Point2D;
 
 import java.util.function.Function;
 

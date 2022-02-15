@@ -2,7 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autotasks.AutoChooser;
@@ -23,7 +23,7 @@ public class Robot extends TimedRobot {
   private LimelightVisionTracking limelight = LimelightVisionTracking.getInstance();
   // private static ColorSensor colorSensor = ColorSensor.getInstance();
 
-  private PowerDistributionPanel pdp = new PowerDistributionPanel();
+  private PowerDistribution pdp = new PowerDistribution();
 
 
 
@@ -50,7 +50,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("limelight.targetFound()", limelight.targetFound());
     // limelight.optimizedDistance();
 
-    if (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue) {
+    if (DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
       ledColor.set(false);
     }
     else {

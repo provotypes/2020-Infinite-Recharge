@@ -1,12 +1,14 @@
 package frc.robot;
 
-import com.analog.adis16470.frc.ADIS16470_IMU.ADIS16470CalibrationTime;
-import com.analog.adis16470.frc.ADIS16470_IMU.IMUAxis;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel;
 
+import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
+import edu.wpi.first.wpilibj.SPI.Port;
+import edu.wpi.first.wpilibj.ADIS16470_IMU;
+import edu.wpi.first.wpilibj.ADIS16470_IMU.CalibrationTime;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -36,7 +38,8 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
     private static SpeedControllerGroup rightGroup = new SpeedControllerGroup(frontRight, rearRight);
 
     private static Drivetrain instance;
-    private IMUAngleTracker IMU = new IMUAngleTracker();
+    //private IMUAngleTracker IMU = new IMUAngleTracker();
+    private static ADIS16470_IMU IMU = new ADIS16470_IMU();
     private double xP;
     private final double MIN_POWER = 0.07;
     private final double TURN_MIN_ANGLE_DEGREES = 0.5;
@@ -69,7 +72,7 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
         frontRightEncoder.setPositionConversionFactor(DISTANCE_PER_ROTATION);
         rearRightEncoder.setPositionConversionFactor(DISTANCE_PER_ROTATION);
         resetEncodersAndGyro();
-        IMU.setYawAxis(IMUAxis.kZ);
+        //IMU.setYawAxis(IMUAxis.kZ);
         
 
         SmartDashboard.putNumber("drivetrain_kP", kP);
@@ -96,6 +99,7 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
     @Override
     public double getCurrentAngle() {
         return IMU.getAngle();
+        //return IMU.getZAngle();
     }
 
     @Override
@@ -133,8 +137,9 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
 	}
 
 	public void calibrateGyro() {
-        IMU.configCalTime(ADIS16470CalibrationTime._8s);
-        IMU.calibrate();
+        IMU.configCalTime(CalibrationTime._8s);
+
+
     }
 
     public void safeArcade(double speed, double turn) {

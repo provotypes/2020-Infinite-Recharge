@@ -1,6 +1,6 @@
 package frc.robot;
 
-import com.analog.adis16470.frc.ADIS16470_IMU;
+import edu.wpi.first.wpilibj.ADIS16470_IMU;
 
 public class IMUAngleTracker extends ADIS16470_IMU {
 
@@ -34,13 +34,19 @@ public class IMUAngleTracker extends ADIS16470_IMU {
 		long thisTime;
 		double dt = 0.0;
 
-		double lastX = super.getGyroInstantX();
-		double lastY = super.getGyroInstantY();
-		double lastZ = super.getGyroInstantZ();
+		// double lastX = super.getGyroInstantX();
+		double lastX = super.getAccelX();
+		double lastY = super.getAccelY();
+		// double lastY = super.getGyroInstantY();
+		// double lastZ = super.getGyroInstantZ();
+		double lastZ = super.getAccelZ();
 
-		double thisX = super.getGyroInstantX();
-		double thisY = super.getGyroInstantY();
-		double thisZ = super.getGyroInstantZ();
+		double thisX = super.getAccelX();
+		//double thisX = super.getGyroInstantX();
+		double thisY = super.getAccelY();
+		//double thisY = super.getGyroInstantY();
+		double thisZ = super.getAccelZ();
+		//double thisZ = super.getGyroInstantZ();
 
 		while (true) {
 			try {
@@ -49,9 +55,12 @@ public class IMUAngleTracker extends ADIS16470_IMU {
 				e.printStackTrace();
 			}
 
-			thisX = super.getGyroInstantX();
-			thisY = super.getGyroInstantY();
-			thisZ = super.getGyroInstantZ();
+			thisX = super.getAccelX();
+			//thisX = super.getGyroInstantX();
+			thisY = super.getAccelY();
+			//thisY = super.getGyroInstantY();
+			thisZ = super.getAccelZ();
+			//thisZ = super.getGyroInstantZ();
 
 			synchronized (this) {
 				thisTime = System.nanoTime();
