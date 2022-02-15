@@ -1,0 +1,10 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",
+      "/LiveWindow/Ungrouped/DigitalOutput[0]": "Digital Output",
+      "/SmartDashboard/Auto Choice": "String Chooser"
+    }
+  }
+}
