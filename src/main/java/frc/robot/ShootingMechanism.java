@@ -6,8 +6,8 @@ import static java.util.Map.entry;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.revrobotics.CANEncoder;
-import com.revrobotics.CANPIDController;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 
@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.CANSparkMaxLowLevel;
-import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.ControlType;
 
 public class ShootingMechanism {
         
@@ -25,8 +25,8 @@ public class ShootingMechanism {
     private CANSparkMax shooter = new CANSparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless);
     private CANSparkMax shooter_b = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
     //These motor controllers have enocders in them
-    private CANEncoder shooterEncoder = shooter.getEncoder();
-    private CANPIDController pidController;
+    private RelativeEncoder shooterEncoder = shooter.getEncoder();
+    private SparkMaxPIDController pidController;
     private Timer shooterTimer = new Timer();
 
     private final double SHOOTER_KP = 0.0004;

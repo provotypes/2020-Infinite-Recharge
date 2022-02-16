@@ -1,16 +1,15 @@
 package frc.robot;
 
-import com.revrobotics.CANEncoder;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel;
 
-import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
-import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.CalibrationTime;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.easypath.EasyPathDrivetrain;
 
@@ -24,21 +23,20 @@ import frc.robot.easypath.EasyPathDrivetrain;
 public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain {
    
     public static final double DISTANCE_PER_ROTATION = 1.0d/8.0d * 6.1d * Math.PI; // inches
-    private static CANEncoder frontLeftEncoder;
-    private static CANEncoder rearLeftEncoder;
-    private static CANEncoder frontRightEncoder;
-    private static CANEncoder rearRightEncoder;
+    private static RelativeEncoder frontLeftEncoder;
+    private static RelativeEncoder rearLeftEncoder;
+    private static RelativeEncoder frontRightEncoder;
+    private static RelativeEncoder rearRightEncoder;
   
     private static CANSparkMax frontLeft = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
     private static CANSparkMax rearLeft = new CANSparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
 	private static CANSparkMax frontRight = new CANSparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
 	private static CANSparkMax rearRight = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
      
-    private static SpeedControllerGroup leftGroup = new SpeedControllerGroup(frontLeft, rearLeft);
-    private static SpeedControllerGroup rightGroup = new SpeedControllerGroup(frontRight, rearRight);
+    private static MotorControllerGroup leftGroup = new MotorControllerGroup(frontLeft, rearLeft);
+    private static MotorControllerGroup rightGroup = new MotorControllerGroup(frontRight, rearRight);
 
     private static Drivetrain instance;
-    //private IMUAngleTracker IMU = new IMUAngleTracker();
     private static ADIS16470_IMU IMU = new ADIS16470_IMU();
     private double xP;
     private final double MIN_POWER = 0.07;
@@ -72,7 +70,7 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
         frontRightEncoder.setPositionConversionFactor(DISTANCE_PER_ROTATION);
         rearRightEncoder.setPositionConversionFactor(DISTANCE_PER_ROTATION);
         resetEncodersAndGyro();
-        //IMU.setYawAxis(IMUAxis.kZ);
+        IMU.setYawAxis(IMUAxis.kZ);
         
 
         SmartDashboard.putNumber("drivetrain_kP", kP);
