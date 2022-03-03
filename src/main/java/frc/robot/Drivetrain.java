@@ -213,7 +213,7 @@ public class Drivetrain extends DifferentialDrive implements EasyPathDrivetrain 
             outputTurn = 0;
         }
 
-        arcadeDrive(outputSpeed, outputTurn, false);
+        arcadeDrive(outputTurn, outputSpeed, false);
         SmartDashboard.putNumber("Limelight HorizontalAngle",  limelight.getHorizontalAngle());
     }
 
