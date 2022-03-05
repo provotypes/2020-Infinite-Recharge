@@ -16,7 +16,7 @@ public class Robot extends TimedRobot {
   private IntakeMechanism intake = IntakeMechanism.getInstance();
   private TeleopController teleopController = TeleopController.getInstance();
   private ClimbingMechanism climber = ClimbingMechanism.getInstance();
- 
+
 
   private TaskInterface autoRoutine;
   private boolean isTaskRunning = false;
